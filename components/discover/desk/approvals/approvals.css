@@ -97,15 +97,14 @@
   color: var(--gs-white);
 }
 
-/* The firm, opposite the lockup: its light wordmark at the lockup's
-   22px height, at most 110px wide (a one-line wordmark then keeps about
-   the CRX word's cap height); a firm with no wordmark shows its name in
-   the pill. */
+/* The firm, opposite the lockup: its light wordmark, mark and name, at the
+   lockup's 22px height, at most 140px wide; a firm with no wordmark shows
+   its name in the pill. */
 .sec-wordmark {
   display: block;
   margin-left: auto;
   width: auto;
-  max-width: min(var(--gs-size-110px), var(--gs-size-45pct));
+  max-width: min(var(--gs-size-140px), var(--gs-size-45pct));
   height: var(--gs-size-22px);
   object-fit: contain;
   object-position: right center;
@@ -1539,4 +1538,23 @@
   .sec-staff-links {
     margin-left: 0;
   }
+}
+
+/* Home: More actions, one group per wallet under its icon and role. */
+.sec-more-group + .sec-more-group {
+  margin-top: var(--gs-s-4);
+}
+
+.sec-more-head {
+  display: flex;
+  align-items: center;
+  gap: var(--gs-s-3);
+  margin: var(--gs-s-4) 0 var(--gs-s-2);
+  font-size: var(--gs-fs-value);
+  font-weight: var(--gs-fw-bold);
+  color: var(--gs-kyb-head);
+}
+
+.sec-seat-row.sec-seat-icon.sec-more-row {
+  grid-template-columns: auto minmax(0, 1fr) auto;
 }

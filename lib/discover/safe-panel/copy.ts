@@ -125,6 +125,8 @@ export const COPY = {
   FIRM_NEEDED_NOW: "Approvals needed now",
   FIRM_YOU: "You",
   FIRM_ACTIONS: "Actions",
+  FIRM_START_HEAD: "Start an action",
+  FIRM_MORE_HEAD: "More actions",
   FIRM_APPROVE: "Approve request",
   FIRM_DECLINE: "Decline",
   FIRM_WALLET_TITLE: "Confirm in your wallet",
@@ -229,9 +231,10 @@ export const takesEffectLine = (needed: number, delayHours: number) =>
  *  and a run: the plan's `done` ("Trading on CRX is stopped."); through the
  *  queue, "Scheduled. The change can run 72 h from now."; else the approvals
  *  so far, "Proposal recorded. 1 of 3 approvals." */
-export function outcomeLine(kind: "start" | "request", delayHours: number, r: { executed: boolean; approvals: number; needed: number }, done: string): string {
+export function outcomeLine(kind: "start" | "request", delayHours: number, r: { executed: boolean; approvals: number; needed: number }, done: string, keys?: number | null): string {
   if (r.executed) return delayHours > 0 ? `Scheduled. The change can run ${delayHours} h from now.` : done;
-  return `${kind === "start" ? "Proposal" : "Approval"} recorded. ${r.approvals} of ${r.needed} ${approvalsWord(r.needed)}.`;
+  const head = `${kind === "start" ? "Proposal" : "Approval"} recorded.`;
+  return keys ? `${head} ${r.approvals} approved · ${r.needed} of ${keys} needed.` : `${head} ${r.approvals} of ${r.needed} ${approvalsWord(r.needed)}.`;
 }
 
 /** The start-off line of a wallet the connected wallet holds no key on:
@@ -253,8 +256,11 @@ export const approvalsWord = (n: number) => (n === 1 ? "approval" : "approvals")
 export const rangeLine = (min: number, max: number, unit?: string) =>
   max >= Number.MAX_SAFE_INTEGER ? `Enter a number of ${min} or more${unit ? ` ${unit}` : ""}.` : `Enter a number from ${min} to ${max}${unit ? ` ${unit}` : ""}.`;
 
-/** "1 of 3 approvals": an open proposal of the firm's own. */
-export const othersLine = (count: number, needed: number) => `${count} of ${needed} ${approvalsWord(needed)}`;
+/** "1 approved · 3 of 5 needed": an open proposal of the firm's own, with
+ *  the wallet's keys as its seat row counts them; with no key count, "1 of 3
+ *  approvals". */
+export const othersLine = (count: number, needed: number, keys?: number | null) =>
+  keys ? `${count} approved · ${needed} of ${keys} needed` : `${count} of ${needed} ${approvalsWord(needed)}`;
 
 /** "0x1064…264A": an address's first 6 and last 4 characters. */
 export const shortAddress = (a: string) => (a.length > 12 ? `${a.slice(0, 6)}…${a.slice(-4)}` : a);
@@ -265,8 +271,11 @@ export const previewBanner = (firm: string) => `Preview of ${firm}'s view. ${COP
 /** "Waiting for you (2)"; one request alone, "Waiting for you". */
 export const waitingLine = (total: number) => (total > 1 ? `${COPY.FIRM_WAITING} (${total})` : COPY.FIRM_WAITING);
 
-/** "2 of 3 needed": approvals so far of the approvals needed. */
-export const neededOf = (count: number, needed: number) => `${count} of ${needed} needed`;
+/** "2 · 3 of 5 needed": approvals so far, then the approvals needed of the
+ *  wallet's keys as its seat row counts them; with no key count, "2 of 3
+ *  needed". */
+export const neededOf = (count: number, needed: number, keys?: number | null) =>
+  keys ? `${count} · ${needed} of ${keys} needed` : `${count} of ${needed} needed`;
 
 /** "As of 14:02 ET". */
 export const asOfLine = (clock: string) => `As of ${clock}`;

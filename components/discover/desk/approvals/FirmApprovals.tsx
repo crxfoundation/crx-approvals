@@ -49,7 +49,6 @@ import {
   actionTitle,
   COPY,
   DRIVER_ERRORS,
-  neededOf,
   noKeyLine,
   othersLine,
   outcomeLine,
@@ -72,6 +71,7 @@ import type {
   SendResult,
   WalletAction,
 } from "@/lib/discover/safe-panel/firm-driver";
+import { sameAction } from "@/lib/discover/safe-panel/firm-driver";
 import {
   FIRM_LIVE_START,
   FIRM_START,
@@ -138,6 +138,14 @@ export interface SafeLink {
 type Row = { label: string; value: ReactNode };
 
 const actionKey = (a: WalletAction) => `${a.group}:${a.id}`;
+
+/** The actions Home shows first, as tiles: the ones firms start most. */
+const HOME_ACTIONS: readonly WalletAction[] = [
+  { group: "stop", id: "stop-all" },
+  { group: "stop", id: "pause-pair" },
+  { group: "restart", id: "restart" },
+  { group: "restart", id: "cancel-scheduled" },
+];
 const subjectKey = (x: FirmSubject) =>
   x.type === "start"
     ? `start:${actionKey(x.action)}:${JSON.stringify(x.values)}`
@@ -385,6 +393,14 @@ export function FirmApprovals({
   };
 
   const seatOf = (g: GroupId) => seats?.find((s) => s.group === g) ?? null;
+  /** Approved, then Needed as the seat row counts it: "3 of 5". */
+  const approvalRows = (approvals: number, needed: number, group: GroupId | null): Row[] => {
+    const keys = group ? seatOf(group)?.keys : null;
+    return [
+      { label: COPY.FIRM_APPROVED_SO_FAR, value: String(approvals) },
+      { label: COPY.FIRM_NEEDED, value: keys ? `${needed} of ${keys}` : String(needed) },
+    ];
+  };
   /** True when the connected wallet holds a key on the wallet. */
   const holdsKey = (g: GroupId) => seatOf(g)?.mine === true;
 
@@ -777,10 +793,7 @@ export function FirmApprovals({
               head={next.title}
               rows={[
                 { label: COPY.FIRM_ACCOUNT, value: groupOf(next.group).role },
-                {
-                  label: COPY.FIRM_APPROVED_SO_FAR,
-                  value: neededOf(next.approvals, next.needed),
-                },
+                ...approvalRows(next.approvals, next.needed, next.group),
                 ...(next.waitsFor !== null
                   ? [{ label: COPY.FIRM_WAITS, value: waitsLine(next.waitsFor) }]
                   : []),
@@ -804,6 +817,81 @@ export function FirmApprovals({
         ) : (
           seats !== null && <p className="sec-none">{COPY.FIRM_NONE_WAITING}</p>
         )}
+        {seats !== null && (
+          <section aria-labelledby="sec-start">
+            <h2 className="sec-box-head" id="sec-start">
+              {COPY.FIRM_START_HEAD}
+            </h2>
+            {openFail && (
+              <p className="sec-error" role="alert">
+                {openFail}
+              </p>
+            )}
+            <ul className="sec-tiles">
+              {HOME_ACTIONS.map((a) => (
+                <li key={actionKey(a)}>
+                  <button
+                    type="button"
+                    className="sec-tile"
+                    onClick={() => openAction(a)}
+                    disabled={opening !== null}
+                    aria-busy={opening === actionKey(a) || undefined}
+                    aria-describedby={hintId(`home-${actionKey(a)}`)}
+                  >
+                    <ActionIcon action={a.id} />
+                    <span className="sec-tile-title">{actionTitle(a)}</span>
+                    <ActionHint
+                      id={hintId(`home-${actionKey(a)}`)}
+                      text={actionHint(a)}
+                    />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+        {seats !== null && (
+          <section className="sec-box" aria-labelledby="sec-more">
+            <h2 className="sec-box-head" id="sec-more">
+              {COPY.FIRM_MORE_HEAD}
+            </h2>
+            {(["stop", "restart", "members"] as const).map((g) => {
+              const more = actionsOf(g).filter((a) => !HOME_ACTIONS.some((h) => sameAction(h, a)));
+              return (
+                <div key={g} className="sec-more-group">
+                  <h3 className="sec-more-head">
+                    <GroupIcon group={g} />
+                    <span>{groupOf(g).role}</span>
+                  </h3>
+                  <ul className="sec-seat">
+                    {more.map((a) => (
+                      <li key={actionKey(a)}>
+                        <button
+                          type="button"
+                          className="sec-seat-row sec-seat-icon sec-more-row"
+                          onClick={() => openAction(a)}
+                          disabled={opening !== null}
+                          aria-busy={opening === actionKey(a) || undefined}
+                          aria-describedby={hintId(`more-${actionKey(a)}`)}
+                        >
+                          <ActionIcon action={a.id} />
+                          <span className="sec-seat-role">{actionTitle(a)}</span>
+                          <span className="sec-seat-value">
+                            <ChevronRight className="sec-chev" aria-hidden="true" />
+                          </span>
+                          <ActionHint
+                            id={hintId(`more-${actionKey(a)}`)}
+                            text={actionHint(a)}
+                          />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </section>
+        )}
         {state.others.length > 0 && (
           <section className="sec-box" aria-labelledby="sec-others">
             <h2 className="sec-box-head" id="sec-others">
@@ -815,7 +903,7 @@ export function FirmApprovals({
                   <GroupIcon group={r.group} />
                   <span className="sec-act-title">{r.title}</span>
                   <span className="sec-act-value">
-                    {othersLine(r.approvals, r.needed)}
+                    {othersLine(r.approvals, r.needed, seatOf(r.group)?.keys)}
                   </span>
                 </li>
               ))}
@@ -1017,10 +1105,7 @@ export function FirmApprovals({
       const rows: Row[] = [...valueRows];
       if (role) rows.push({ label: COPY.FIRM_ACCOUNT, value: role });
       if (v.request)
-        rows.push({
-          label: COPY.FIRM_APPROVED_SO_FAR,
-          value: neededOf(v.request.approvals, v.request.needed),
-        });
+        rows.push(...approvalRows(v.request.approvals, v.request.needed, v.request.group));
       else if (x.type === "start")
         rows.push({
           label: COPY.FIRM_NEEDED,
@@ -1257,6 +1342,7 @@ export function FirmApprovals({
                     x.type === "run" ? 0 : v.delayHours,
                     r,
                     v.done,
+                    v.group ? seatOf(v.group)?.keys : null,
                   )}
             </p>
           </div>
@@ -1264,12 +1350,7 @@ export function FirmApprovals({
             label={v.title}
             rows={[
               ...(x.type !== "run" && !declined
-                ? [
-                    {
-                      label: COPY.FIRM_APPROVED_SO_FAR,
-                      value: neededOf(r.approvals, r.needed),
-                    },
-                  ]
+                ? approvalRows(r.approvals, r.needed, v.group)
                 : []),
               ...(role ? [{ label: COPY.FIRM_ACCOUNT, value: role }] : []),
               ...(v.number !== null

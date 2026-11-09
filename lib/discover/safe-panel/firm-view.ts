@@ -223,7 +223,8 @@ export function firmMove(s: FirmState, move: FirmMove): FirmState {
     case "account":
       return sc.kind === "home" ? at({ kind: "account", group: move.group }) : s;
     case "action": {
-      if (sc.kind !== "account" || move.action.group !== sc.group || !WALLET_ACTIONS.some((a) => sameAction(a, move.action))) return s;
+      const from = sc.kind === "home" || (sc.kind === "account" && move.action.group === sc.group);
+      if (!from || !WALLET_ACTIONS.some((a) => sameAction(a, move.action))) return s;
       const action = { group: move.action.group, id: move.action.id };
       return at(move.inputs ? { kind: "inputs", action, values: {} } : { kind: "review", subject: { type: "start", action, values: {}, inputs: false } });
     }
