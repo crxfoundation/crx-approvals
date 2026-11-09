@@ -1,0 +1,1373 @@
+/*
+  The skin's tokens. Every --gs-* value lives in this file; the other
+  stylesheets hold no hex.
+
+  data-skin="gs"      the skin in CRX colours: the look.
+  data-skin="gs-ref"  the same roles in the reference colours, for
+                      comparison only. No screen links it.
+
+  The tokens sit on .discover-root and on <body>, so a node portalled to
+  <body> reads them too. The bridge block at the foot points the discover
+  variables (--accent, --text, --dsk-*, ...) at the tokens.
+
+  Notes:
+  - --gs-hair is a COLOUR: the softest line. Every line is 1px wide.
+  - --gs-rule is the row line. --gs-rule-strong is the title rule.
+    --gs-field is the line under an input: a field has no box.
+    --gs-edge-control is the edge that marks a control as one: a field's
+    box, a switch's off track. It reads 3:1 or more on every ground.
+  - Sizes are px, --gs-lh-body and --gs-lh-ui are unitless, and each size
+    has its own line height in px (--gs-lh-title, -hero, -h2, -h3).
+  - --gs-top-h, --gs-stage-pad-x, --gs-head-pad-y, --gs-gutter and the
+    title, hero and h2 sizes step down under 860px in this file. Do not set
+    them again.
+  - The page title: one class, .dsk-h1, on every page, one rule
+    (base.css): var(--gs-font-serif) at var(--gs-fw-title), tracking
+    var(--gs-track-title), in var(--gs-head). --gs-font-serif points at
+    the sans (Inter). A look sets these tokens; no stylesheet sets a title's
+    type (lib/discover/page-title.test.ts). A hero figure and a panel title:
+    var(--gs-font-sans) at var(--gs-fw-light), which is 600: no light
+    weight. A section head: var(--gs-fs-h3) at var(--gs-fw-bold). Body
+    text tracks at var(--gs-track).
+  - A label over its value: the label at var(--gs-fs-label) in
+    var(--gs-ink-2), the value at var(--gs-fs-value) in var(--gs-ink).
+  - --gs-mute is for a rule, an icon and a disabled control. It is never
+    text: it reads 2.56:1 on the ground, under the 3:1 of large text. Quiet
+    text of any size reads in --gs-ink-2 (4.76:1).
+  - --gs-link-tint is the link and the accent word on a tinted ground
+    (the raised fills, a notice, a status tint); the bridge below sets it.
+  - --gs-ink-2 reads 4.5:1 on the ground. On a tinted ground (panel, code,
+    tag, notice) the bridge below steps it to --gs-ink-2-tint.
+  - Status: --gs-up, --gs-down, --gs-warn, --gs-info are the dot, the icon
+    and the fill. The same status as small TEXT is the -ink token
+    (--gs-up-ink), alone or on its -bg tint.
+  - A button: var(--gs-btn-h) high (40), pad 0 var(--gs-btn-pad-x), radius
+    var(--gs-radius-1). A field's box is var(--gs-input-h) high (40).
+  - A focus ring: 1px of --gs-focus, 2px outside the control
+    (outline: 1px solid var(--gs-focus); outline-offset: 2px). A field in
+    focus turns its line to --gs-focus.
+  - The shell (shell.css): a rail --gs-rail-w wide on the left edge, then
+    the stage, --gs-stage-pad-x in from each side. The stage runs the
+    window: a page's column is the stage, to --gs-stage-max. Text for
+    reading stops at --gs-prose-max. Do not set the stage's side padding.
+  - From a 860px window, on a page with the rail, the head's row is 40
+    (--gs-head-row) in every frame, and the body stands --gs-stage-pad-y
+    (24) under it: a head with no tabs holds no pad under its row
+    (shell.css).
+  - From a 1180px window the rail is the open menu: --gs-rail-w is
+    --gs-menu-w there, and --gs-head-tabs-add is 0 (the head holds no
+    tabs). The frame is dense there: --gs-stage-pad-x is 32 and the head
+    has no pad (--gs-head-pad-y 0, so --gs-head-band 40). All step in
+    this file. A rule that reads them follows.
+  - The page title is var(--gs-fs-page) on var(--gs-lh-page): 26/32, 22/28
+    under 860px (the shark look: 24/28 at every width, at 500).
+  - Corners: --gs-radius-1 (6) a control, --gs-radius-2 (10) a panel, a
+    tile, a notice, a drawer part; --gs-radius-tag (4) a badge, a chip;
+    --gs-radius-pill a filter pill, a count, an avatar. Panels carry no
+    shadow.
+    --gs-fs-title stays the size of a hero figure.
+  - The page head (base.css): the title row, --gs-head-pad-y above and
+    under it, then the title rule or, on a page with tabs, the grey band
+    with the tabs on its foot. --gs-head-band is that head's whole height.
+    Beside the skin's menu a head with no tabs is its top pad and its row
+    (shell.css).
+  - --gs-head-h is the height of what stays pinned at the window's top: 0
+    on a wide window (the top bar scrolls away), the phone bar under 860px.
+    Pin under it (top: var(--gs-head-h)).
+*/
+
+/* Inter's variable file (OFL, app/fonts/inter/OFL.txt) under a second name:
+   the app's Inter faces start at 400, and the hero figures are 300. */
+@font-face {
+  font-family: "Skin Sans";
+  src: url("../../fonts/inter/inter-var-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* The title serif (OFL, app/fonts/skin-serif/OFL.txt): a modified Source
+   Serif 4, optical size 60, weights 500 to 900. Only "gs-ref" uses it. */
+@font-face {
+  font-family: "Skin Serif";
+  src: url("../../fonts/skin-serif/skin-serif-latin-wght.woff2") format("woff2");
+  font-weight: 500 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* The sans of "gs-ref" (OFL, app/fonts/skin-grotesk/OFL.txt): Hanken Grotesk,
+   weights 100 to 900. */
+@font-face {
+  font-family: "Skin Grotesk";
+  src: url("../../fonts/skin-grotesk/hanken-grotesk-latin-wght.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
+/* Shared scales also serve Discover components before a skin is selected.
+   The document element holds them too: its scroll padding (shell.css,
+   trade.css) reads the size tokens. */
+.discover-root:not(#gs),
+html:has(.discover-root),
+body:has(.discover-root) {
+  /* A control's edge (a field's box, a switch's off track): 3:1 or more
+     on every ground, with or without a skin. */
+  --gs-edge-control: rgba(0, 0, 0, 0.45);
+  --gs-fs-label: 12px;
+  --gs-fs-table: 13px;
+  --gs-fs-ui: 14px;
+  --gs-fs-value: 16px;
+  --gs-fw-regular: 400;
+  --gs-fw-medium: 500;
+  --gs-fw-bold: 600;
+  --gs-s-1: 4px;
+  --gs-s-2: 8px;
+  --gs-s-3: 12px;
+  --gs-s-4: 16px;
+  --gs-s-5: 24px;
+  --gs-s-6: 32px;
+  --gs-s-7: 48px;
+  --gs-s-8: 64px;
+  --gs-radius-pill: 999px;
+  --gs-size-60px: 60px;
+  --gs-size-6px: 6px;
+  --gs-size-6pct: 6%;
+  --gs-size-10pct: 10%;
+  --gs-leading-16px: 16px;
+  --gs-size-72px: 72px;
+  --gs-leading-20px: 20px;
+  --gs-leading-normal: normal;
+  --gs-size-2px: 2px;
+  --gs-size-neg-1px: -1px;
+  --gs-leading-18px: 18px;
+  --gs-size-10px: 10px;
+  --gs-size-14px: 14px;
+  --gs-fs-15px: 15px;
+  --gs-fs-13px: 13px;
+  --gs-breakpoint-559p98px: 559.98px;
+  --gs-size-20px: 20px;
+  --gs-size-56px: 56px;
+  --gs-size-0p3em: 0.3em;
+  --gs-size-6ch: 6ch;
+  --gs-size-0p36em: 0.36em;
+  --gs-fs-11px: 11px;
+  --gs-size-3px: 3px;
+  --gs-size-640px: 640px;
+  --gs-size-850px: 850px;
+  --gs-size-40px: 40px;
+  --gs-leading-24px: 24px;
+  --gs-size-30pct: 30%;
+  --gs-fs-12p5px: 12.5px;
+  --gs-size-22px: 22px;
+  --gs-size-52px: 52px;
+  --gs-size-60pct: 60%;
+  --gs-size-9px: 9px;
+  --gs-size-17px: 17px;
+  --gs-size-28px: 28px;
+  --gs-size-132px: 132px;
+  --gs-size-38px: 38px;
+  --gs-size-50pct: 50%;
+  --gs-radius-8px: 8px;
+  --gs-size-neg-50pct: -50%;
+  --gs-size-150px: 150px;
+  --gs-size-45pct: 45%;
+  --gs-size-360px: 360px;
+  --gs-size-140px: 140px;
+  --gs-tracking-neg-0p01em: -0.01em;
+  --gs-size-46pct: 46%;
+  --gs-breakpoint-641px: 641px;
+  --gs-breakpoint-640px: 640px;
+  --gs-breakpoint-859px: 859px;
+  --gs-size-50px: 50px;
+  --gs-size-92pct: 92%;
+  --gs-size-19pct: 19%;
+  --gs-size-89pct: 89%;
+  --gs-size-100vmax: 100vmax;
+  --gs-size-neg-100vmax: -100vmax;
+  --gs-size-7px: 7px;
+  --gs-size-5px: 5px;
+  --gs-size-neg-7px: -7px;
+  --gs-size-0p75px: 0.75px;
+  --gs-size-1p75px: 1.75px;
+  --gs-size-1p5px: 1.5px;
+  --gs-size-0p25px: 0.25px;
+  --gs-size-19px: 19px;
+  --gs-size-0p7px: 0.7px;
+  --gs-size-13px: 13px;
+  --gs-radius-50pct: 50%;
+  --gs-size-neg-2px: -2px;
+  --gs-size-560px: 560px;
+  --gs-size-18px: 18px;
+  --gs-size-12vh: 12vh;
+  --gs-size-600px: 600px;
+  --gs-leading-25px: 25px;
+  --gs-size-neg-3px: -3px;
+  --gs-size-25px: 25px;
+  --gs-size-120px: 120px;
+  --gs-size-240px: 240px;
+  --gs-size-11px: 11px;
+  --gs-size-14em: 14em;
+  --gs-size-2em: 2em;
+  --gs-radius-0p5em: 0.5em;
+  --gs-fs-10px: 10px;
+  --gs-leading-1: 1;
+  --gs-tracking-0p02em: 0.02em;
+  --gs-size-1p5em: 1.5em;
+  --gs-fs-17px: 17px;
+  --gs-radius-10px: 10px;
+  --gs-leading-30px: 30px;
+  --gs-size-180px: 180px;
+  --gs-size-8ch: 8ch;
+  --gs-size-1ch: 1ch;
+  --gs-size-80px: 80px;
+  --gs-size-170px: 170px;
+  --gs-size-230px: 230px;
+  --gs-size-115px: 115px;
+  --gs-size-1p25px: 1.25px;
+  --gs-size-100px: 100px;
+  --gs-size-30px: 30px;
+  --gs-size-36em: 36em;
+  --gs-size-45px: 45px;
+  --gs-size-22pct: 22%;
+  --gs-size-18pct: 18%;
+  --gs-fs-20px: 20px;
+  --gs-leading-28px: 28px;
+  --gs-tracking-neg-0p015em: -0.015em;
+  --gs-size-196px: 196px;
+  --gs-size-168px: 168px;
+  --gs-breakpoint-860px: 860px;
+  --gs-breakpoint-619px: 619px;
+  --gs-breakpoint-799px: 799px;
+  --gs-breakpoint-479px: 479px;
+  --gs-breakpoint-519p98px: 519.98px;
+  --gs-breakpoint-693px: 693px;
+  --gs-breakpoint-659px: 659px;
+  --gs-breakpoint-819p98px: 819.98px;
+  --gs-breakpoint-620px: 620px;
+  --gs-breakpoint-759px: 759px;
+  --gs-breakpoint-760px: 760px;
+  --gs-breakpoint-813px: 813px;
+  --gs-breakpoint-820px: 820px;
+  --gs-breakpoint-909p98px: 909.98px;
+  --gs-breakpoint-559px: 559px;
+  --gs-breakpoint-389px: 389px;
+  --gs-breakpoint-480px: 480px;
+  --gs-breakpoint-479p98px: 479.98px;
+  --gs-breakpoint-359p98px: 359.98px;
+  --gs-breakpoint-520px: 520px;
+  --gs-fs-18px: 18px;
+  --gs-leading-26px: 26px;
+  --gs-leading-13px: 13px;
+  --gs-size-0p38em: 0.38em;
+  --gs-fs-24px: 24px;
+  --gs-size-neg-16px: -16px;
+  --gs-size-neg-4px: -4px;
+  --gs-size-1em: 1em;
+  --gs-size-10ch: 10ch;
+  --gs-size-12ch: 12ch;
+  --gs-size-126px: 126px;
+  --gs-size-118px: 118px;
+  --gs-size-200px: 200px;
+  --gs-size-136px: 136px;
+  --gs-fs-36px: 36px;
+  --gs-fs-48px: 48px;
+  --gs-leading-44px: 44px;
+  --gs-size-480px: 480px;
+  --gs-size-160px: 160px;
+  --gs-size-205px: 205px;
+  --gs-size-90px: 90px;
+  --gs-size-206px: 206px;
+  --gs-size-116px: 116px;
+  --gs-size-134px: 134px;
+  --gs-size-220px: 220px;
+  --gs-size-12p5em: 12.5em;
+  --gs-size-6p5em: 6.5em;
+  --gs-size-280px: 280px;
+  --gs-size-270px: 270px;
+  --gs-size-0p42em: 0.42em;
+  --gs-size-48px: 48px;
+  --gs-size-32px: 32px;
+  --gs-size-44px: 44px;
+  --gs-size-neg-11px: -11px;
+  --gs-breakpoint-989px: 989px;
+  --gs-breakpoint-1439px: 1439px;
+  --gs-breakpoint-680px: 680px;
+  --gs-breakpoint-960px: 960px;
+  --gs-breakpoint-679p98px: 679.98px;
+  --gs-breakpoint-560px: 560px;
+  --gs-breakpoint-339p98px: 339.98px;
+  --gs-breakpoint-1155p98px: 1155.98px;
+  --gs-breakpoint-867p98px: 867.98px;
+  --gs-breakpoint-879p98px: 879.98px;
+  --gs-size-100vw: 100vw;
+  --gs-size-320px: 320px;
+  --gs-size-352px: 352px;
+  --gs-radius-3px: 3px;
+  --gs-size-137px: 137px;
+  --gs-size-260px: 260px;
+  --gs-size-12p7em: 12.7em;
+  --gs-size-4pct: 4%;
+  --gs-size-neg-1em: -1em;
+  --gs-size-neg-0p5em: -0.5em;
+  --gs-size-440px: 440px;
+  --gs-size-27px: 27px;
+  --gs-size-193px: 193px;
+  --gs-breakpoint-459px: 459px;
+  --gs-breakpoint-349px: 349px;
+  --gs-breakpoint-999px: 999px;
+  --gs-breakpoint-540px: 540px;
+  --gs-breakpoint-931px: 931px;
+  --gs-size-9pct: 9%;
+  --gs-size-72pct: 72%;
+  --gs-size-45rem: 45rem;
+  --gs-size-720px: 720px;
+  --gs-fs-0p84em: 0.84em;
+  --gs-fs-0p875em: 0.875em;
+  --gs-size-0p1em: 0.1em;
+  --gs-size-7p5px: 7.5px;
+  --gs-size-36px: 36px;
+  --gs-leading-1p55: 1.55;
+  --gs-size-24pct: 24%;
+  --gs-size-1p4em: 1.4em;
+  --gs-leading-1p5: 1.5;
+  --gs-size-neg-9px: -9px;
+  --gs-leading-1p3: 1.3;
+  --gs-radius-2px: 2px;
+  --gs-size-8pct: 8%;
+  --gs-size-104px: 104px;
+  --gs-size-76px: 76px;
+  --gs-size-96px: 96px;
+  --gs-size-94px: 94px;
+  --gs-size-46px: 46px;
+  --gs-size-26px: 26px;
+  --gs-size-15px: 15px;
+  --gs-size-42pct: 42%;
+  --gs-size-29pct: 29%;
+  --gs-size-300px: 300px;
+  --gs-size-62vw: 62vw;
+  --gs-size-16pct: 16%;
+  --gs-size-38rem: 38rem;
+  --gs-leading-32px: 32px;
+  --gs-fw-300: 300;
+  --gs-tracking-neg-0p005em: -0.005em;
+  --gs-size-760px: 760px;
+  --gs-size-10em: 10em;
+  --gs-size-2p1539em: 2.1539em;
+  --gs-fs-0p9286em: 0.9286em;
+  --gs-leading-2p1539em: 2.1539em;
+  --gs-size-0p5px: 0.5px;
+  --gs-breakpoint-599px: 599px;
+  --gs-breakpoint-413px: 413px;
+  --gs-size-211px: 211px;
+  --gs-size-227px: 227px;
+  --gs-size-255px: 255px;
+  --gs-size-275px: 275px;
+  --gs-breakpoint-600px: 600px;
+  --gs-breakpoint-1180px: 1180px;
+  --gs-breakpoint-1179px: 1179px;
+  --gs-size-84pct: 84%;
+  --gs-size-78pct: 78%;
+  --gs-size-28pct: 28%;
+  --gs-size-40pct: 40%;
+  --gs-size-86pct: 86%;
+  --gs-size-85pct: 85%;
+  --gs-size-80pct: 80%;
+  --gs-size-124px: 124px;
+  --gs-size-82pct: 82%;
+  --gs-size-70pct: 70%;
+  --gs-size-35pct: 35%;
+  --gs-size-36pct: 36%;
+  --gs-fs-32px: 32px;
+  --gs-leading-40px: 40px;
+  --gs-tracking-neg-0p02em: -0.02em;
+  --gs-size-16rem: 16rem;
+  --gs-size-6em: 6em;
+  --gs-fs-28px: 28px;
+  --gs-leading-34px: 34px;
+  --gs-size-neg-12px: -12px;
+  --gs-size-neg-8px: -8px;
+  --gs-size-212px: 212px;
+  --gs-size-148px: 148px;
+  --gs-breakpoint-511px: 511px;
+  --gs-radius-9px: 9px;
+  --gs-shadow-control-ink: rgba(13, 32, 38, 0.24);
+  --gs-size-34px: 34px;
+  --gs-size-neg-0p01em: -0.01em;
+  --gs-size-128px: 128px;
+  --gs-size-2ch: 2ch;
+  --gs-size-neg-6px: -6px;
+  --gs-size-2p85em: 2.85em;
+  --gs-fs-130px: 130px;
+  --gs-size-1p6em: 1.6em;
+  --gs-size-51px: 51px;
+  --gs-size-313px: 313px;
+  --gs-size-93px: 93px;
+  --gs-size-340px: 340px;
+  --gs-size-130px: 130px;
+  --gs-size-190px: 190px;
+  --gs-size-110px: 110px;
+  --gs-shadow-tip-ink: rgba(13, 32, 38, 0.08);
+  --gs-breakpoint-1023px: 1023px;
+  --gs-breakpoint-1360px: 1360px;
+  --gs-breakpoint-399p98px: 399.98px;
+  --gs-breakpoint-919px: 919px;
+  --gs-breakpoint-639px: 639px;
+  --gs-breakpoint-599p98px: 599.98px;
+  --gs-breakpoint-293p98px: 293.98px;
+  --gs-breakpoint-720px: 720px;
+  --gs-breakpoint-319p98px: 319.98px;
+  --gs-fs-22px: 22px;
+  --gs-size-55pct: 55%;
+  --gs-size-8em: 8em;
+  --gs-radius-6px: 6px;
+  --gs-breakpoint-759p98px: 759.98px;
+  --gs-tracking-0p26em: 0.26em;
+  --gs-size-neg-0p06em: -0.06em;
+  --gs-tracking-0p12em: 0.12em;
+  --gs-size-14pct: 14%;
+  --gs-size-22rem: 22rem;
+  --gs-size-14rem: 14rem;
+  --gs-size-24rem: 24rem;
+  --gs-tracking-0p24em: 0.24em;
+  --gs-size-neg-0p24em: -0.24em;
+  --gs-fs-8px: 8px;
+  --gs-size-19p5px: 19.5px;
+  --gs-size-2p1667em: 2.1667em;
+  --gs-size-264px: 264px;
+  --gs-leading-14px: 14px;
+  --gs-size-2p4615em: 2.4615em;
+  --gs-size-304px: 304px;
+  --gs-size-86vw: 86vw;
+  --gs-size-neg-100pct: -100%;
+  --gs-size-2p5px: 2.5px;
+  --gs-size-62pct: 62%;
+  --gs-size-56pct: 56%;
+  --gs-size-neg-20px: -20px;
+  --gs-tracking-0p1em: 0.1em;
+  --gs-size-66px: 66px;
+  --gs-breakpoint-1099px: 1099px;
+  --gs-breakpoint-519px: 519px;
+  --gs-breakpoint-159px: 159px;
+  --gs-breakpoint-719px: 719px;
+  --gs-size-448px: 448px;
+  --gs-size-24em: 24em;
+  --gs-size-0p85em: 0.85em;
+  --gs-size-neg-0p85em: -0.85em;
+  --gs-breakpoint-1039px: 1039px;
+  --gs-size-70px: 70px;
+  --gs-size-250px: 250px;
+  --gs-size-210px: 210px;
+  --gs-size-5em: 5em;
+  --gs-size-176px: 176px;
+  --gs-size-105px: 105px;
+  --gs-breakpoint-880px: 880px;
+  --gs-breakpoint-1040px: 1040px;
+  --gs-breakpoint-879px: 879px;
+  --gs-breakpoint-679px: 679px;
+  --gs-breakpoint-481px: 481px;
+  --gs-size-1120px: 1120px;
+  --gs-size-21px: 21px;
+  --gs-size-41px: 41px;
+  --gs-size-61px: 61px;
+  --gs-size-91px: 91px;
+  --gs-size-121px: 121px;
+  --gs-size-125px: 125px;
+  --gs-size-95px: 95px;
+  --gs-size-123px: 123px;
+  --gs-size-75px: 75px;
+  --gs-size-117px: 117px;
+  --gs-size-88px: 88px;
+  --gs-size-174px: 174px;
+  --gs-size-175px: 175px;
+  --gs-size-135px: 135px;
+  --gs-size-185px: 185px;
+  --gs-size-145px: 145px;
+  --gs-size-195px: 195px;
+  --gs-size-398px: 398px;
+  --gs-size-648px: 648px;
+  --gs-leading-15px: 15px;
+  --gs-size-85px: 85px;
+  --gs-size-1p25em: 1.25em;
+  --gs-size-392px: 392px;
+  --gs-radius-4px: 4px;
+  --gs-size-7pct: 7%;
+  --gs-shadow-button-ink: rgba(15, 23, 42, 0.06);
+  --gs-size-9em: 9em;
+  --gs-size-188px: 188px;
+  --gs-size-24ch: 24ch;
+  --gs-breakpoint-1024px: 1024px;
+  --gs-breakpoint-896px: 896px;
+  --gs-breakpoint-930px: 930px;
+  --gs-breakpoint-1020px: 1020px;
+  --gs-breakpoint-1140px: 1140px;
+  --gs-breakpoint-396px: 396px;
+  --gs-breakpoint-730px: 730px;
+  --gs-breakpoint-781px: 781px;
+  --gs-breakpoint-911px: 911px;
+  --gs-breakpoint-1430px: 1430px;
+  --gs-breakpoint-1481px: 1481px;
+  --gs-breakpoint-895p98px: 895.98px;
+  --gs-breakpoint-1139p98px: 1139.98px;
+  --gs-breakpoint-959p98px: 959.98px;
+  --gs-size-362px: 362px;
+  --gs-size-225px: 225px;
+  --gs-size-322px: 322px;
+  --gs-breakpoint-1279p98px: 1279.98px;
+  --gs-size-4000px: 4000px;
+  --gs-fs-27px: 27px;
+  --gs-fs-26px: 26px;
+  --gs-size-1p75em: 1.75em;
+  --gs-size-5p75em: 5.75em;
+  --gs-size-16p5em: 16.5em;
+  --gs-size-11p5em: 11.5em;
+  --gs-size-2p75em: 2.75em;
+  --gs-size-84px: 84px;
+  --gs-mask-ink: #000;
+  --gs-breakpoint-36p921539em: 36.921539em;
+  --gs-breakpoint-27p690770em: 27.690770em;
+  --gs-breakpoint-66p076924em: 66.076924em;
+  --gs-breakpoint-58p384616em: 58.384616em;
+  --gs-breakpoint-24p538462em: 24.538462em;
+  --gs-breakpoint-43em: 43em;
+  --gs-breakpoint-50em: 50em;
+  --gs-breakpoint-20em: 20em;
+  --gs-breakpoint-48p57em: 48.57em;
+  --gs-breakpoint-68p57em: 68.57em;
+  --gs-breakpoint-82p57em: 82.57em;
+  --gs-breakpoint-61p998em: 61.998em;
+  --gs-breakpoint-62p85em: 62.85em;
+  --gs-breakpoint-16em: 16em;
+  --gs-breakpoint-17em: 17em;
+  --gs-breakpoint-24p9em: 24.9em;
+  --gs-breakpoint-22em: 22em;
+  --gs-breakpoint-54em: 54em;
+  --gs-breakpoint-24em: 24em;
+  --gs-breakpoint-40em: 40em;
+  --gs-breakpoint-15em: 15em;
+  --gs-breakpoint-46em: 46em;
+  --gs-breakpoint-75p384615em: 75.384615em;
+  --gs-breakpoint-75p307693em: 75.307693em;
+  --gs-breakpoint-45p998462em: 45.998462em;
+  --gs-breakpoint-58p45em: 58.45em;
+  --gs-breakpoint-34em: 34em;
+  --gs-breakpoint-74p2em: 74.2em;
+  --gs-breakpoint-54p2em: 54.2em;
+  --gs-breakpoint-39p9em: 39.9em;
+  --gs-breakpoint-52p3em: 52.3em;
+  --gs-breakpoint-52p2em: 52.2em;
+  --gs-breakpoint-19em: 19em;
+  --gs-breakpoint-47em: 47em;
+  --gs-breakpoint-53em: 53em;
+  --gs-size-0p875rem: 0.875rem;
+  --gs-radius-9999px: 9999px;
+  --gs-size-0p625rem: 0.625rem;
+  --gs-size-0p25rem: 0.25rem;
+  --gs-size-2rem: 2rem;
+  --gs-leading-1p25: 1.25;
+  --gs-size-0p5rem: 0.5rem;
+  --gs-size-0p375rem: 0.375rem;
+  --gs-size-0p75rem: 0.75rem;
+  --gs-size-1p75rem: 1.75rem;
+  --gs-size-92px: 92px;
+  --gs-size-86px: 86px;
+  --gs-tracking-neg-0p025em: -0.025em;
+  --gs-size-21pct: 21%;
+  --gs-white: #ffffff;
+  --gs-base-panel: #f2f5f7;
+  --gs-base-ink: #1c2b36;
+  --gs-base-muted: #5b6b7a;
+  --gs-neutral-10: rgba(0, 0, 0, 0.1);
+  --gs-base-rule: #c9d2da;
+  --gs-base-accent: #2f6eb6;
+  --gs-base-warn: #a84a14;
+  --gs-size-400px: 400px;
+  --gs-size-408px: 408px;
+  --gs-size-100vh: 100vh;
+  --gs-fs-0p75em: 0.75em;
+  --gs-fs-1p25em: 1.25em;
+  --gs-breakpoint-980px: 980px;
+  --gs-breakpoint-979px: 979px;
+  --gs-breakpoint-699px: 699px;
+  --gs-size-122px: 122px;
+  --gs-fs-30px: 30px;
+  --gs-breakpoint-1279px: 1279px;
+  --gs-breakpoint-384px: 384px;
+  --gs-breakpoint-359px: 359px;
+  --gs-breakpoint-329px: 329px;
+  --gs-neutral-6: rgba(0, 0, 0, 0.06);
+  --gs-radius-20px: 20px;
+  --gs-neutral-4: rgba(0, 0, 0, 0.04);
+  --gs-size-75pct: 75%;
+  --gs-radius-16px: 16px;
+  --gs-ticket-field: #f5f5f7;
+  --gs-radius-14px: 14px;
+  --gs-radius-12px: 12px;
+  --gs-leading-22px: 22px;
+  --gs-leading-56px: 56px;
+  --gs-ticket-error: #b42318;
+  --gs-size-20pct: 20%;
+  --gs-size-12rem: 12rem;
+  --gs-drawer-overlay: rgba(20, 20, 30, 0.28);
+  --gs-size-800px: 800px;
+  --gs-drawer-shadow-ink: rgba(0, 0, 0, 0.28);
+  --gs-size-neg-24px: -24px;
+  --gs-size-1pct: 1%;
+  --gs-notification-mark: #5b6b80;
+  --gs-size-224px: 224px;
+  --gs-size-108px: 108px;
+  --gs-size-74px: 74px;
+  --gs-size-100dvh: 100dvh;
+  --gs-size-12p5lh: 12.5lh;
+  --gs-size-1lh: 1lh;
+  --gs-size-0p5lh: 0.5lh;
+  --gs-stroke-1p25: 1.25;
+  --gs-size-100svh: 100svh;
+  --gs-stroke-1: 1;
+  --gs-stroke-1p75: 1.75;
+  --gs-stroke-1p5: 1.5;
+  --gs-stroke-2: 2;
+  --gs-size-2lh: 2lh;
+  --gs-size-3lh: 3lh;
+  --gs-stroke-1p2: 1.2;
+  --gs-stroke-1p4: 1.4;
+  --gs-stroke-2p25: 2.25;
+  --gs-stroke-5: 5;
+  --gs-stroke-1p6: 1.6;
+  --gs-icon-18px: 18px;
+  --gs-icon-16px: 16px;
+  --gs-icon-15px: 15px;
+  --gs-icon-17px: 17px;
+  --gs-size-0p125rem: 0.125rem;
+  --gs-icon-14px: 14px;
+  --gs-stroke-2p2: 2.2;
+  --gs-stroke-1p8: 1.8;
+  --gs-icon-20px: 20px;
+  --gs-icon-10px: 10px;
+  --gs-stroke-3p5: 3.5;
+  --gs-icon-12px: 12px;
+  --gs-icon-13px: 13px;
+  --gs-stroke-2p6: 2.6;
+  --gs-icon-32px: 32px;
+  --gs-stroke-2p5: 2.5;
+  --gs-icon-28px: 28px;
+  --gs-stroke-2p4: 2.4;
+  --gs-icon-184px: 184px;
+  --gs-icon-26px: 26px;
+}
+
+/* The KYB client frame (crx-onboarding DESIGN.md, "The Navy Band"), with or
+   without a skin: the firm approvals preview (components/discover/desk/
+   approvals). */
+body:has(.discover-root) {
+  --gs-kyb-navy: #02213b;
+  --gs-kyb-navy-hover: color-mix(in srgb, #02213b 85%, #ffffff);
+  --gs-kyb-navy-tint: color-mix(in srgb, #02213b 6%, #ffffff);
+  --gs-kyb-on-navy-rule: rgba(255, 255, 255, 0.28);
+  --gs-kyb-page: #fcfcfc;
+  --gs-kyb-panel: #f9f9f9;
+  --gs-kyb-panel-2: #f3f3f3;
+  --gs-kyb-ink: #0d0d0d;
+  --gs-kyb-head: #050505;
+  --gs-kyb-ink-2: #5d5d5d;
+  --gs-kyb-muted: #8f8f8f;
+  --gs-kyb-hair: rgba(0, 0, 0, 0.05);
+  --gs-kyb-rule: rgba(0, 0, 0, 0.1);
+  --gs-kyb-rule-strong: rgba(0, 0, 0, 0.15);
+  --gs-kyb-control-hover: rgba(0, 0, 0, 0.25);
+  --gs-kyb-link: #455acc;
+  --gs-kyb-link-hover: #00355f;
+  --gs-kyb-step: #b9731c;
+  --gs-kyb-accent: #007e5f;
+  --gs-kyb-fw-brand: 700;
+  --gs-kyb-shell: 592px;
+  --gs-kyb-ring: 96px;
+  --gs-kyb-ring-in: 68px;
+}
+
+/* ── type, space, shape, controls, motion: one set for both palettes ───── */
+.discover-root[data-skin^="gs"]:not(#gs),
+body:has(.discover-root[data-skin^="gs"]) {
+  --gs-font-sans: "Skin Sans", var(--font-sans), "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --gs-font-serif: var(--gs-font-sans);
+  --gs-font-mono: var(--font-mono-face), ui-monospace, "IBM Plex Mono", Menlo, "Courier New", monospace;
+
+  /* Meow 2 (meow2/system/SYSTEM.md): weight, not size. Titles and figures
+     at 600, UI words at 500, body at 400; no light weight. */
+  --gs-fs-hero: 32px;
+  --gs-fs-title: 32px;
+  /* The page title. */
+  --gs-fs-page: 26px;
+  --gs-lh-page: 32px;
+  --gs-fs-h2: 22px;
+  --gs-fs-h3: 16px;
+  --gs-fs-value: 16px;
+  --gs-fs-body: 14px;
+  --gs-fs-ui: 14px;
+  --gs-fs-table: 13px;
+  --gs-fs-label: 12px;
+  --gs-lh-hero: 38px;
+  --gs-lh-title: 38px;
+  --gs-lh-h2: 28px;
+  --gs-lh-h3: 24px;
+  --gs-lh-body: 1.6;
+  --gs-lh-ui: 1.5;
+  --gs-fw-light: 600;
+  --gs-fw-regular: 400;
+  --gs-fw-medium: 500;
+  --gs-fw-bold: 600;
+  --gs-fw-title: 600;
+  --gs-track: -0.006em;
+  --gs-track-title: -0.02em;
+  --gs-track-caps: 0.05em;
+
+  /* A 4px grid. */
+  --gs-s-1: 4px;
+  --gs-s-2: 8px;
+  --gs-s-3: 12px;
+  --gs-s-4: 16px;
+  --gs-s-5: 24px;
+  --gs-s-6: 32px;
+  --gs-s-7: 48px;
+  --gs-s-8: 64px;
+  /* A company mark's tints (kit FirmMark): a fill and its ink, each pair
+     past 7:1. */
+  --gs-mark-bg-1: #dbeafe;
+  --gs-mark-ink-1: #1e40af;
+  --gs-mark-bg-2: #dcfce7;
+  --gs-mark-ink-2: #14532d;
+  --gs-mark-bg-3: #fef3c7;
+  --gs-mark-ink-3: #78350f;
+  --gs-mark-bg-4: #ffe4e6;
+  --gs-mark-ink-4: #881337;
+  --gs-mark-bg-5: #ede9fe;
+  --gs-mark-ink-5: #5b21b6;
+  --gs-mark-bg-6: #ccfbf1;
+  --gs-mark-ink-6: #134e4a;
+  --gs-gutter: 16px;
+  /* The corner notices (desk-book.css): the stack's width, its inset from
+     the window's right edge and from its foot. */
+  --gs-toast-w: var(--gs-size-360px);
+  --gs-toast-x: var(--gs-stage-pad-x);
+  --gs-toast-y: var(--gs-stage-pad-x);
+  --gs-rail-w: 90px;
+  --gs-rail-open-w: 190px;
+  --gs-rail-row: 80px;
+  --gs-rail-brand-h: 90px;
+  --gs-stage-pad-x: 32px;
+  --gs-stage-pad-y: 24px;
+  --gs-stage-max: 1600px;
+  --gs-prose-max: 784px;
+  /* The API docs' one block (api.css): the reading column, the gap and
+     the rail of a reading page (guide.css .gs-read[data-rail]). */
+  --gs-api-grid-max: calc(var(--gs-size-760px) + var(--gs-s-7) + var(--gs-size-240px));
+  /* The page head: the title row between two equal pads, then the rule.
+     The top pad sets the title 32 under the window's top (meow2 shell
+     SPEC §8). */
+  --gs-head-pad-y: 32px;
+  --gs-head-row: 48px;
+  --gs-head-band: calc(2 * var(--gs-head-pad-y) + var(--gs-head-row));
+  /* The tabs on the foot of a head band, and what they add to its height:
+     the band's bottom pad holds the tabs (40) and 27 over them. */
+  --gs-tabs-h: 40px;
+  --gs-head-tabs-add: 35px;
+  /* The side list beside an article. */
+  --gs-side-w: 220px;
+  /* The strip with the account control, over the stage's top. */
+  --gs-top-h: 50px;
+  /* What stays pinned at the window's top. */
+  --gs-head-h: 0px;
+  --gs-row-h: 50px;
+  /* A desk table (base.css): a row is 40 with its rule, the head band 35
+     with its rule. --gs-row-h stays the row of an article's table and of
+     the API reference. */
+  --gs-tr-h: 44px;
+  --gs-th-h: 36px;
+  --gs-cell-pad-x: 16px;
+  --gs-cell-pad-y: 12px;
+  /* A panel's inset: its head, bar, body, table edge cells, list rows and
+     foot stand this far in from its edge. Its rules run edge to edge. */
+  --gs-card-x: 20px;
+
+  /* Soft corners: 6 a control, 10 a panel, 4 a badge, round a pill. */
+  --gs-radius-0: 0px;
+  --gs-radius-1: 6px;
+  --gs-radius-2: 10px;
+  --gs-radius-tag: 4px;
+  --gs-radius-pill: 999px;
+  --gs-shadow-pop: 0 8px 24px rgba(15, 23, 42, 0.1), 0 0 0 1px var(--gs-hair);
+  --gs-shadow-sheet: -12px 0 32px rgba(15, 23, 42, 0.12);
+  /* A chosen segmented cell, a primary button. */
+  --gs-shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.06);
+  /* A field in focus: the accent edge and this ring. */
+  --gs-focus-ring: 0 0 0 3px color-mix(in srgb, var(--gs-focus) 18%, transparent);
+
+  /* One height for a button and a field's box: 40. A control in a filter
+     bar (a search, a pill) is 32. */
+  --gs-btn-h: 40px;
+  --gs-btn-h-sm: 40px;
+  --gs-btn-h-lg: 40px;
+  --gs-btn-pad-x: 16px;
+  --gs-input-h: 40px;
+  --gs-input-h-lg: 60px;
+  --gs-ctl-h: 32px;
+  /* The capsule: one shape for every control in a chart panel's head (a
+     menu, a segmented control, Historical compare, Export CSV) and the
+     Account page's balance range. It is --gs-ctl-h high and round, on a
+     1px line in --gs-ctl-line; its words stand --gs-ctl-pad-x inside the
+     line, and two capsules stand --gs-ctl-gap apart. A segmented
+     control's cells stand --gs-ctl-inset inside its line. */
+  --gs-ctl-radius: var(--gs-radius-pill);
+  --gs-ctl-line: var(--gs-field);
+  --gs-ctl-pad-x: var(--gs-s-3);
+  --gs-ctl-gap: var(--gs-s-2);
+  --gs-ctl-inset: var(--gs-size-2px);
+  /* A badge: 20 high at its 12px word, and it grows with its word at a
+     larger text size (em: the badge's own font size). */
+  --gs-chip-h: calc(20em / 12);
+
+  /* The word of a filled button that is off, on the disabled fill. */
+  --gs-disabled-ink: var(--gs-ink-2);
+
+  /* A chart's series, by place: a series keeps its place, so its colour,
+     whatever else shows. Any two stand apart on the ground in full colour
+     vision and in red-blind and green-blind vision, and each stands 3:1
+     against the ground. */
+  --gs-series-1: #2c4f86;
+  --gs-series-2: #1293b8;
+  --gs-series-3: #c98500;
+  --gs-series-4: #d55181;
+
+  --gs-ease: ease-in-out;
+  --gs-dur-account-exit: 180ms;
+  --gs-dur-fast: 150ms;
+  --gs-dur: 200ms;
+  /* A drawer slides in on this curve. */
+  --gs-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --gs-dur-sheet: 220ms;
+  /* The menu's collapse and expand (lib/discover/rail-motion), on the
+     timing of Chrome's vertical tab strip on macOS: open 400 ms, shut
+     350 ms, on its emphasized ease (two joined cubics, here as linear()
+     stops within 0.003 of the curve). */
+  --gs-rail-open-d: 400ms;
+  --gs-rail-shut-d: 350ms;
+  /* A word the moving menu's edge cuts: its tail fades over 3 characters,
+     at most a third of its box. */
+  --gs-rail-word-fade: linear-gradient(to left, transparent, #000 min(3ch, 33%));
+  --gs-rail-ease: linear(0 0%, 0.0117 3.8%, 0.0443 7.175%, 0.0929 9.975%, 0.1531 12.225%, 0.2216 14%, 0.2931 15.325%, 0.3654 16.3%, 0.5001 17.75%, 0.5757 18.825%, 0.6421 20.15%, 0.7043 21.95%, 0.7632 24.475%, 0.8189 28.1%, 0.8709 33.375%, 0.9177 41.075%, 0.957 52.375%, 0.9859 69.125%, 0.9996 94.4%, 1 100%);
+}
+
+/* A window under 1180px: a narrower inset. */
+@media (max-width: 1179px) {
+  .discover-root[data-skin^="gs"]:not(#gs),
+  body:has(.discover-root[data-skin^="gs"]) {
+    --gs-stage-pad-x: 32px;
+    --gs-side-w: 200px;
+  }
+}
+
+/* A window from 860px, on a page with the rail: the head's row is 40 high
+   beside the open menu and beside the collapsed one, so the title and the
+   body under it stand alike at every width. */
+@media (min-width: 860px) {
+  .discover-root[data-skin^="gs"]:not(#gs):has(.gs-rail),
+  body:has(.discover-root[data-skin^="gs"]):has(.gs-rail) {
+    --gs-head-row: 40px;
+  }
+}
+
+/* A window from 1180px, on a page with the rail: the rail is the open menu
+   (shell.css), and the head holds no tabs. */
+@media (min-width: 1180px) {
+  .discover-root[data-skin^="gs"]:not(#gs):has(.gs-rail),
+  body:has(.discover-root[data-skin^="gs"]):has(.gs-rail) {
+    --gs-rail-w: var(--gs-menu-w);
+    --gs-head-tabs-add: 0px;
+  }
+
+  /* The dense frame beside the open menu. */
+  .discover-root[data-skin^="gs"]:not(#gs):has(.gs-rail),
+  body:has(.discover-root[data-skin^="gs"]):has(.gs-rail) {
+    --gs-stage-pad-x: 32px;
+    --gs-stage-pad-y: 24px;
+    --gs-head-pad-y: 0px;
+  }
+}
+
+@media (max-width: 859px) {
+  .discover-root[data-skin^="gs"]:not(#gs),
+  body:has(.discover-root[data-skin^="gs"]) {
+    --gs-fs-hero: 28px;
+    --gs-fs-title: 28px;
+    --gs-fs-page: 22px;
+    --gs-fs-h2: 20px;
+    --gs-lh-hero: 34px;
+    --gs-lh-title: 34px;
+    --gs-lh-page: 28px;
+    --gs-lh-h2: 26px;
+    --gs-gutter: 16px;
+    --gs-stage-pad-x: 16px;
+    --gs-stage-pad-y: 24px;
+    --gs-head-pad-y: 32px;
+    --gs-head-row: 28px;
+    --gs-top-h: 56px;
+    --gs-head-h: var(--gs-top-h);
+    --gs-cell-pad-x: 10px;
+  }
+}
+
+/* A phone: a panel's inset is 12. */
+@media (max-width: 559px) {
+  .discover-root[data-skin^="gs"]:not(#gs),
+  body:has(.discover-root[data-skin^="gs"]) {
+    --gs-card-x: 12px;
+  }
+}
+
+/* ── palette: CRX colours, the skin's look (data-skin="gs") ───────────── */
+.discover-root[data-skin^="gs"]:not(#gs),
+body:has(.discover-root[data-skin^="gs"]) {
+  /* ground */
+  --gs-ground: #ffffff;
+  --gs-panel: #eef3f2;
+  --gs-panel-2: #e6eceb;
+  --gs-band: #0d2026;
+  --gs-tile: #081619;
+  --gs-overlay: rgba(8, 22, 25, 0.3);
+  --gs-skeleton: #eef0f0;
+  /* rail */
+  --gs-rail: #081619;
+  --gs-rail-ink: #ffffff;
+  --gs-rail-mute: #ffffff;
+  --gs-rail-line: rgba(255, 255, 255, 0.2);
+  --gs-rail-active-bg: #ffffff;
+  --gs-rail-active-ink: #0d2026;
+  /* ink */
+  --gs-ink: #0d2026;
+  --gs-ink-2: #414354;
+  --gs-ink-2-tint: #414354;
+  --gs-mute: #6b7376;
+  --gs-head: #0d2026;
+  --gs-th: #4d5558;
+  --gs-link: #007e5f;
+  --gs-link-hover: #0d2026;
+  --gs-link-tint: #006b51;
+  --gs-link-tint-hover: #0d2026;
+  /* rules */
+  --gs-hair: rgba(13, 32, 38, 0.1);
+  --gs-rule: #c9cfd2;
+  --gs-rule-strong: #5f6568;
+  --gs-field: #c9cfd2;
+  --gs-field-hover: #5f6568;
+  --gs-outline: #007e5f;
+  --gs-placeholder: #8a9396;
+  /* accent */
+  --gs-accent: #007e5f;
+  --gs-accent-hover: #0d2026;
+  --gs-accent-active: #081619;
+  --gs-accent-ink: #ffffff;
+  --gs-focus: #007e5f;
+  --gs-selected: rgba(0, 126, 95, 0.14);
+  --gs-disabled: #c9cfd2;
+  --gs-neutral: #e6eceb;
+  /* status: the dot and the fill, the tint, the same status as small text */
+  --gs-up: #1f9d78;
+  --gs-down: #c4473b;
+  --gs-warn: #c77d0a;
+  --gs-info: #3d6f7c;
+  --gs-up-bg: #e3efeb;
+  --gs-down-bg: #f6e4e2;
+  --gs-warn-bg: #f8ecd9;
+  --gs-info-bg: #e1ebed;
+  --gs-none-bg: #e6eceb;
+  --gs-up-ink: #00735a;
+  --gs-down-ink: #b42318;
+  --gs-warn-ink: #9a5b00;
+  --gs-info-ink: #2f5d68;
+  --gs-none-ink: #414354;
+  /* the status badge's navy: the left menu's colour (--gs-rail) as the
+     word, and a light tint of it as the fill (neutral, info). Both follow
+     the rail of the palette in force. The chosen mark (a tile, a pill)
+     draws its edge in the same navy. */
+  --gs-badge-ink: var(--gs-rail);
+  --gs-badge-bg: color-mix(in srgb, var(--gs-rail) 7%, var(--gs-ground));
+  --gs-badge-info-bg: color-mix(in srgb, var(--gs-rail) 14%, var(--gs-ground));
+  /* the warn badge's word (down's ink on down's tint), fixed on the root:
+     a part that lifts --gs-down-ink for its words on the navy
+     (home-video.css, the head) leaves the badge's word on its own tint;
+     the status page turns it with the red tokens (status.css) */
+  --gs-badge-down-ink: var(--gs-down-ink);
+  /* a service's status (lib/status/shade.ts: the status page, the API
+     Overview's Status panel): one blue of the navy family per shade, darker
+     for a worse state. -bg is the badge's fill, -ink its word, -mark the
+     portal page's day bar, the dot and the word. All follow the palette in
+     force.
+       quiet     no verdict: the hollow badge, a navy line
+       up        the lightest fill of the blue
+       pause     a light fill of the blue
+       impaired  the blue, the word in white
+       down      the navy, the word in white */
+  --gs-st-quiet-bg: var(--gs-ground);
+  --gs-st-quiet-line: color-mix(in srgb, var(--gs-rail) 30%, var(--gs-ground));
+  --gs-st-quiet-ink: var(--gs-rail);
+  --gs-st-up-bg: color-mix(in srgb, var(--gs-info) 16%, var(--gs-ground));
+  --gs-st-up-ink: var(--gs-rail);
+  --gs-st-up-mark: color-mix(in srgb, var(--gs-info) 50%, var(--gs-ground));
+  --gs-st-pause-bg: color-mix(in srgb, var(--gs-info) 32%, var(--gs-ground));
+  --gs-st-pause-ink: var(--gs-rail);
+  --gs-st-pause-mark: color-mix(in srgb, var(--gs-info) 75%, var(--gs-ground));
+  --gs-st-impaired-bg: var(--gs-info);
+  --gs-st-impaired-ink: var(--gs-rail-ink);
+  --gs-st-impaired-mark: var(--gs-info);
+  --gs-st-down-bg: var(--gs-rail);
+  --gs-st-down-ink: var(--gs-rail-ink);
+  --gs-st-down-mark: var(--gs-rail);
+  /* the status page's day bars (lib/status/services UPTIME_BANDS): one
+     green per uptime band, g1 the best and darkest to g5 the worst and
+     lightest, the same in every palette; each clears 3:1 on the white
+     ground */
+  --gs-st-g1: #024c24;
+  --gs-st-g2: #02622e;
+  --gs-st-g3: #0c7936;
+  --gs-st-g4: #298f43;
+  --gs-st-g5: #49a554;
+  /* a day of closed hours only: the best green's hatch on the ground; a
+     day with no check: an empty slot, its line in the muted ink */
+  --gs-st-hatch: repeating-linear-gradient(135deg, var(--gs-st-g1) 0 2px, transparent 2px 4px);
+  --gs-st-empty-line: var(--gs-mute);
+  /* code: a neutral grey block in both palettes */
+  --gs-code-bg: #f2f5f7;
+  --gs-code-ink: #0d2026;
+  --gs-code-chip: #e3e8ec;
+}
+
+/* ── palette "gs-ref": Production's look, Meow 2 ─────────────────────── */
+/* Meow's light neutrals tinted to slate (Tailwind slate: grey with a navy
+   cast), the navy rail, one azure accent (meow2/system/SYSTEM.md §4). */
+.discover-root[data-skin^="gs"]:not(#gs):is([data-skin="gs-ref"], [data-skin="gs-alt"]),
+body:has(.discover-root[data-skin^="gs"]):has(.discover-root:is([data-skin="gs-ref"], [data-skin="gs-alt"])) {
+  /* ground */
+  --gs-ground: #ffffff;
+  --gs-panel: #f1f5f9;
+  --gs-panel-2: #e8edf3;
+  --gs-band: #02213b;
+  --gs-tile: #02213b;
+  --gs-overlay: rgba(15, 23, 42, 0.32);
+  --gs-skeleton: #eef2f6;
+  /* rail */
+  --gs-rail: #02213b;
+  --gs-rail-ink: #ffffff;
+  --gs-rail-mute: rgba(255, 255, 255, 0.72);
+  --gs-rail-line: rgba(255, 255, 255, 0.12);
+  --gs-rail-active-bg: rgba(255, 255, 255, 0.1);
+  --gs-rail-active-ink: #ffffff;
+  /* ink */
+  --gs-ink: #0f172a;
+  --gs-ink-2: #64748b;
+  --gs-ink-2-tint: #556275;
+  --gs-mute: #94a3b8;
+  --gs-head: #0f172a;
+  --gs-th: #556275;
+  --gs-link: #2563eb;
+  --gs-link-hover: #1d4ed8;
+  --gs-link-tint: #1d4ed8;
+  --gs-link-tint-hover: #1e40af;
+  /* rules */
+  --gs-hair: #e2e8f0;
+  --gs-rule: #e2e8f0;
+  --gs-rule-strong: #cbd5e1;
+  --gs-field: #cbd5e1;
+  --gs-field-hover: #94a3b8;
+  --gs-outline: #2563eb;
+  --gs-placeholder: #64748b;
+  /* accent */
+  --gs-accent: #2563eb;
+  --gs-accent-hover: #1d4ed8;
+  --gs-accent-active: #1e40af;
+  --gs-accent-ink: #ffffff;
+  --gs-focus: #2563eb;
+  --gs-selected: rgba(37, 99, 235, 0.08);
+  /* an off primary: the accent faded, its word white */
+  --gs-disabled: #93b4f5;
+  --gs-disabled-ink: #ffffff;
+  --gs-neutral: #f1f5f9;
+  /* status: the dot and the fill, the tint, the same status as small text */
+  --gs-up: #16a34a;
+  --gs-down: #dc2626;
+  --gs-warn: #d97706;
+  --gs-info: #2f6eb6;
+  --gs-up-bg: #dcfce7;
+  --gs-down-bg: #fee2e2;
+  --gs-warn-bg: #fef3c7;
+  --gs-info-bg: #e3e6f7;
+  --gs-none-bg: #f1f5f9;
+  --gs-up-ink: #15803d;
+  --gs-down-ink: #b91c1c;
+  --gs-warn-ink: #b45309;
+  --gs-info-ink: #2b62a3;
+  --gs-none-ink: #475569;
+  /* code */
+  --gs-code-bg: #f8fafc;
+  --gs-code-ink: #0f172a;
+  --gs-code-chip: #e2e8f0;
+}
+
+/* "gs-alt" is "gs-ref" by another name: both take the type block's sans
+   (Inter) and the palette above. */
+
+/* ── bridge: the discover variables follow the tokens ──────────────────── */
+/* An untouched corner of discover reads these, so it takes the skin's
+   colours and faces with no rule of its own. */
+.discover-root[data-skin^="gs"]:not(#gs),
+body:has(.discover-root[data-skin^="gs"]) :is(.docs-root, .docs-sheet-root) {
+  --bg: var(--gs-ground);
+  --surface: var(--gs-ground);
+  --surface-raised: var(--gs-ground);
+  --sidebar: var(--gs-panel);
+  --glass: color-mix(in srgb, var(--gs-ground) 92%, transparent);
+  --text: var(--gs-ink);
+  --text-secondary: var(--gs-ink-2);
+  --text-tertiary: var(--gs-ink-2);
+  --accent: var(--gs-accent);
+  --accent-hover: var(--gs-accent-hover);
+  --accent-ring: color-mix(in srgb, var(--gs-focus) 30%, transparent);
+  --border: var(--gs-rule);
+  --border-strong: var(--gs-rule);
+  --success: var(--gs-up-ink);
+  --warning: var(--gs-warn-ink);
+  --danger: var(--gs-down-ink);
+  --code-bg: var(--gs-code-bg);
+  --code-fg: var(--gs-code-ink);
+  --font-text: var(--gs-font-sans);
+  --font-display: var(--gs-font-sans);
+  /* the header's height and the stage's side inset (nav-tabs.css) */
+  --dsc-head: var(--gs-head-h);
+  --dsc-inset: var(--gs-stage-pad-x);
+  /* the stage's column: the stage itself */
+  --dsc-col: var(--gs-stage-max);
+  --gs-stage-col: var(--gs-stage-max);
+  /* the console register (desk.css) */
+  --dsk-ground: var(--gs-ground);
+  --dsk-wash: var(--gs-panel);
+  --dsk-rule: var(--gs-rule);
+  --dsk-rule-soft: var(--gs-hair);
+  --dsk-red: var(--gs-down-ink);
+  --dsk-head-ground: var(--gs-ground);
+  /* the motion and surface layer (apple.css): flat, a solid focus ring */
+  --apl-hair: 1px;
+  --apl-ring: 0 0 0 2px var(--gs-ground), 0 0 0 3px var(--gs-focus);
+  --apl-lift: 0 0 0 0 transparent;
+  /* Tailwind's pill and overlay (the account menu) */
+  --r-pill: var(--gs-radius-1);
+  --shadow-overlay: var(--gs-shadow-pop);
+}
+
+/* A tinted ground (a panel, a code block, a tag, a notice, the head band
+   and its tabs): the second ink and the link step darker, so small text
+   on it keeps a 4.5:1 contrast (the link: 4.17:1 on the info tint, 4.23:1
+   on the down tint, 4.39:1 on the stronger raised fill; --gs-link-tint
+   reads 5.4:1 or more on each). */
+.discover-root[data-skin^="gs"]:not(#gs) :is(.gs-shell[data-gs-sub="tabs"] :is(.dsk-head, .docs-article-header), .gs-tabs, .apir-pre, .apir-card-head, .apir-card-body, .docs-code, .dev-api-callout[data-tone="info"], .dev-api-response, .dsk-empty, .dsk-tag, .dsk-notice, .dsk-wallet-bar, .dsk-onb-both, .dsk-wallet-one, .dsk-onb-card:has(.dsk-onb-toggle[aria-expanded="true"]), .portal-wallet-proof-block, .docs-walk-frame, .tkr-quote-result, .dsk-invite, .dsk-orgmark),
+body:has(.discover-root[data-skin^="gs"]) :is([role="dialog"][aria-label="Choose the pair"] [role="option"]) {
+  --gs-ink-2: var(--gs-ink-2-tint);
+  --gs-link: var(--gs-link-tint);
+  --gs-link-hover: var(--gs-link-tint-hover);
+}
+
+/* The kit's tinted grounds take the same step: the drawer's band, a table
+   row on the wash (open, chosen, a total), a chosen pill or chip, a
+   segmented track (the kit's, the network switch's, the dev view's: its
+   cells, counts and second words), the totals band, a chosen or tinted
+   tile, the banner row, the page shown in a pager. */
+.discover-root[data-skin^="gs"]:not(#gs) :is(.gs-sheet-band, .dsk-table tbody tr:is([data-open], [data-on], [data-rec="open"], [aria-selected="true"], .gs-total), .gs-pill:is([aria-pressed="true"], [aria-selected="true"], [aria-checked="true"], [data-active]), :is(.gs-vt-panel > .dsk-seg--tabs, .gs-bar .dsk-seg) button[data-active], .gs-totals, .gs-tile[aria-pressed="true"], .gs-tiles[data-fill] .gs-tile, .gs-banner, .gs-foot .dsk-pager-num[aria-current="page"], .gs-range, .dsk-seg, .dsc-view-seg) {
+  --gs-ink-2: var(--gs-ink-2-tint);
+  --gs-link: var(--gs-link-tint);
+  --gs-link-hover: var(--gs-link-tint-hover);
+}
+
+.discover-root[data-skin^="gs"]:not(#gs) .docs-prose,
+body:has(.discover-root[data-skin^="gs"]) .docs-prose {
+  --code-bg: var(--gs-code-bg);
+  --code-fg: var(--gs-code-ink);
+}
+
+.discover-root[data-skin^="gs"]:not(#gs) .apir-scope,
+body:has(.discover-root[data-skin^="gs"]) .apir-scope {
+  --apir-rule: var(--gs-rule);
+  --apir-head: var(--gs-panel);
+  --apir-panel: var(--gs-ground);
+}
+
+/* A flow diagram in an article: the page ground, the skin's inks. */
+.discover-root[data-skin^="gs"]:not(#gs) .tkr-article .docs-prose .crxd {
+  --accent: var(--gs-head);
+  --accent-hover: var(--gs-head);
+  --success: var(--gs-up-ink);
+  --danger: var(--gs-down-ink);
+  --warning: var(--gs-warn-ink);
+  --text: var(--gs-ink);
+  --text-secondary: var(--gs-ink-2);
+  --text-tertiary: var(--gs-ink-2);
+  --border-strong: var(--gs-rule);
+  --border: var(--gs-hair);
+  --bg: var(--gs-ground);
+  --surface: var(--gs-ground);
+  --surface-raised: var(--gs-ground);
+}
+
+/* ── the left menu, Meow 2 (W11 L; shell.css, meow2 shell SPEC §4, §11) ── */
+/* A light column (Meow's quiet side, in slate): rows 32 high (40 on a
+   phone), the chosen row a white pill on a hairline, the icon in the
+   accent. 232 open, 72 collapsed: under 1180px always, from 1180px when
+   the viewer shuts it (lib/discover/menu-shut). The badge navy stays the
+   rail's (--gs-rail). */
+.discover-root[data-skin^="gs"]:not(#gs),
+body:has(.discover-root[data-skin^="gs"]) {
+  --gs-menu-w: 232px;
+  --gs-menu-shut-w: 72px;
+  --gs-menu-row-h: 32px;
+  /* The CRX lockup top left (the menu, the phone bar, the bar of a page
+     with no menu): the mark's box and the word's line 22, the word 17,
+     Meow's lockup to its rail (about a third of the open menu's width). */
+  --gs-lockup-h: 22px;
+  --gs-lockup-word: 17px;
+  /* The collapsed menu's width: 72 at 14px text; at a larger text size
+     it grows with its text, so its widest short word ("Pricing", 11/500)
+     stays on one line, and stays under the open form's 160. Every reader
+     of --gs-rail-w is at the rail's 14px, so all resolve it alike. */
+  --gs-menu-shut-fit: clamp(var(--gs-menu-shut-w), 3.4em, 152px);
+  --gs-menu-bg: #f8fafc;
+  --gs-menu-ink: #334155;
+  --gs-menu-hover: #eef2f6;
+  --gs-menu-on: #ffffff;
+  --gs-menu-on-icon: var(--gs-accent);
+  --gs-menu-on-ring: 0 0 0 1px var(--gs-hair), 0 1px 2px rgba(15, 23, 42, 0.05);
+  --gs-menu-group-ink: var(--gs-ink-2);
+  --gs-menu-line: var(--gs-hair);
+  /* A group's pages (shell.css): one step under the rows. Rows 28 high
+     (36 on a phone), the word 13 in the second ink, a group's name 12
+     in the ink, 16 of air above each name; the page you are on marked on
+     the guide line in the accent. */
+  --gs-menu-sub-h: 28px;
+  --gs-menu-sub-fs: var(--gs-fs-13px);
+  --gs-menu-sub-ink: var(--gs-ink-2);
+  --gs-menu-sub-label-ink: var(--gs-ink);
+  --gs-menu-sub-mark: var(--gs-accent);
+  --gs-menu-sub-air: var(--gs-s-4);
+  --gs-menu-fill: #ffffff;
+  --gs-menu-avatar: #3b6ea8;
+  --gs-menu-avatar-ink: #ffffff;
+  --gs-menu-tag-bg: var(--gs-rail);
+  --gs-menu-tag-ink: #ffffff;
+  --gs-menu-shadow: 12px 0 32px rgba(15, 23, 42, 0.12);
+  /* Opening a group in the menu (shell.css): the look's menu clock on its
+     strong ease-out (--sm-d-menu, --sm-ease-out), else the kit's. */
+  --gs-menu-open-d: var(--sm-d-menu, var(--gs-dur));
+  --gs-menu-open-ease: var(--sm-ease-out, var(--gs-ease-out));
+}
+
+@media (max-width: 859px) {
+  .discover-root[data-skin^="gs"]:not(#gs),
+  body:has(.discover-root[data-skin^="gs"]) {
+    --gs-menu-row-h: 40px;
+    --gs-menu-sub-h: 36px;
+  }
+}
+
+/* Under 1180px the menu is collapsed (it opens over the stage). */
+@media (max-width: 1179px) {
+  .discover-root[data-skin^="gs"]:not(#gs):has(.gs-rail),
+  body:has(.discover-root[data-skin^="gs"]):has(.gs-rail) {
+    --gs-rail-w: var(--gs-menu-shut-fit);
+  }
+}
+
+/* From 1180px a menu the viewer shut is collapsed, and the frame beside it
+   is the narrow window's: the head's top pad; on a page with tabs the head
+   band, the tabs on its foot. */
+@media (min-width: 1180px) {
+  .discover-root[data-skin^="gs"]:not(#gs):has(.gs-rail[data-menu="shut"]),
+  body:has(.discover-root[data-skin^="gs"]):has(.gs-rail[data-menu="shut"]) {
+    --gs-rail-w: var(--gs-menu-shut-fit);
+    --gs-head-tabs-add: 35px;
+    --gs-head-pad-y: 32px;
+  }
+}
+@font-face {
+  font-family: "Skin Sans Figure";
+  src: url("../../fonts/inter/inter-var-latin.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  ascent-override: 92%;
+  descent-override: 19%;
+  line-gap-override: 0%;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Skin Grotesk Figure";
+  src: url("../../fonts/skin-grotesk/hanken-grotesk-latin-wght.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  ascent-override: 89%;
+  descent-override: 19%;
+  line-gap-override: 0%;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Icon defaults have the same precedence as SVG size attributes. */
+:where(.discover-root, body:has(.discover-root)) :where(.dsc-icon-10) {
+  width: var(--gs-icon-10px);
+  height: var(--gs-icon-10px);
+}
+:where(.discover-root, body:has(.discover-root)) :where(.dsc-icon-12) {
+  width: var(--gs-icon-12px);
+  height: var(--gs-icon-12px);
+}
+:where(.discover-root, body:has(.discover-root)) :where(.dsc-icon-13) {
+  width: var(--gs-icon-13px);
+  height: var(--gs-icon-13px);
+}
+:where(.discover-root, body:has(.discover-root)) :where(.dsc-icon-14) {
+  width: var(--gs-icon-14px);
+  height: var(--gs-icon-14px);
+}
+:where(.discover-root, body:has(.discover-root)) :where(.dsc-icon-15) {
+  width: var(--gs-icon-15px);
+  height: var(--gs-icon-15px);
+}
+:where(.discover-root, body:has(.discover-root)) :where(.dsc-icon-16) {
+  width: var(--gs-icon-16px);
+  height: var(--gs-icon-16px);
+}
+:where(.discover-root, body:has(.discover-root)) :where(.dsc-icon-17) {
+  width: var(--gs-icon-17px);
+  height: var(--gs-icon-17px);
+}
+:where(.discover-root, body:has(.discover-root)) :where(.dsc-icon-18) {
+  width: var(--gs-icon-18px);
+  height: var(--gs-icon-18px);
+}
+:where(.discover-root, body:has(.discover-root)) :where(.dsc-icon-20) {
+  width: var(--gs-icon-20px);
+  height: var(--gs-icon-20px);
+}
+:where(.discover-root, body:has(.discover-root)) :where(.dsc-icon-26) {
+  width: var(--gs-icon-26px);
+  height: var(--gs-icon-26px);
+}
+:where(.discover-root, body:has(.discover-root)) :where(.dsc-icon-184) {
+  width: var(--gs-icon-184px);
+  height: var(--gs-icon-184px);
+}
+
+.discover-root[data-skin^="gs"]:not(#gs) .tkr-quote[data-gs-ticket] {
+  --gs-chart-bar-above: color-mix(in srgb, var(--gs-series-2) 55%, var(--gs-panel));
+  --gs-chart-bar-below: color-mix(in srgb, var(--gs-series-4) 55%, var(--gs-panel));
+}

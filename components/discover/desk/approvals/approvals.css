@@ -1,0 +1,1542 @@
+/* The firm's approvals (FirmApprovals) in the KYB client frame (crx-onboarding
+   DESIGN.md, "The Navy Band"): the navy band holds the lockup, the firm's
+   name and one title; a 560px white panel overlaps the band's foot by 32px;
+   the step bar at the panel's top (4px parts: done ink, current amber, to
+   come grey); summary boxes of label and value rows; one navy pill as the
+   primary. Light only, flat, Inter. The values are the --gs-kyb-* tokens
+   (skin-gs/tokens.css), set with or without a skin: the secure host draws
+   no skin.
+
+   The frame stands fixed over the window, above Discover's shell. While it
+   shows, the shell's chrome (the top bar, the menu, the dev bar, the phone's
+   bar, the tabs, the skip link, the dock, a dev host's test firm strip) is
+   not drawn, so neither a pointer nor the keyboard reaches it.
+
+   Under 560px: the panel's padding narrows, the step labels give way to one
+   "Step n of 3" line, and the foot's buttons stack at full width, 48px, the
+   primary first. */
+
+.discover-root:has(.sec-flow) :is(.docs-topbar, .dsk-side, .tkr-side, .gs-devbar, .gs-mbar, .gs-rail, .gs-scrim, .gs-tabs, .gs-sidelist, .gs-skip, .gs-dock, .gs-dock-open, .dsc-testfirm) {
+  display: none !important;
+}
+
+.sec-flow {
+  --sec-font: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sec-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow-y: auto;
+  background: var(--gs-kyb-page);
+  color: var(--gs-kyb-ink);
+  font-family: var(--sec-font);
+  font-size: var(--gs-fs-value);
+  font-weight: var(--gs-fw-regular);
+  line-height: var(--gs-leading-1p5);
+  -webkit-font-smoothing: antialiased;
+  color-scheme: light;
+}
+
+/* Tracking over the skin's own (skin-gs: a rule with an id's weight). */
+.sec-flow * {
+  box-sizing: border-box;
+  letter-spacing: var(--gs-tracking-neg-0p01em) !important;
+}
+
+.sec-flow :focus-visible {
+  outline: var(--gs-size-2px) solid var(--gs-kyb-navy);
+  outline-offset: var(--gs-size-2px);
+}
+
+/* ── the band ────────────────────────────────────────────────────────────── */
+
+.sec-band {
+  background: var(--gs-kyb-navy);
+  color: var(--gs-white);
+  padding: var(--gs-s-5) var(--gs-s-4) calc(var(--gs-s-7) + var(--gs-s-6));
+}
+
+.sec-band-in {
+  max-width: var(--gs-size-560px);
+  margin: 0 auto;
+  padding: 0 var(--gs-size-40px);
+}
+
+.sec-band :focus-visible {
+  outline-color: var(--gs-white);
+}
+
+.sec-band-top {
+  display: flex;
+  align-items: center;
+  gap: var(--gs-s-3);
+  min-height: var(--gs-s-6);
+  margin: 0 0 var(--gs-s-5);
+}
+
+.sec-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gs-size-10px);
+  flex: none;
+}
+
+.sec-mark {
+  display: block;
+  width: auto;
+  height: var(--gs-size-22px);
+}
+
+.sec-flow .sec-word {
+  font-family: var(--font-mont-brand, "Montserrat"), "Inter", Arial, sans-serif;
+  font-size: var(--gs-fs-17px);
+  font-weight: var(--gs-kyb-fw-brand);
+  line-height: var(--gs-leading-1);
+  letter-spacing: var(--gs-size-0p42em) !important;
+  margin-right: calc(-1 * var(--gs-size-0p42em));
+  color: var(--gs-white);
+}
+
+/* The firm, opposite the lockup: its light wordmark at the lockup's
+   22px height, at most 110px wide (a one-line wordmark then keeps about
+   the CRX word's cap height); a firm with no wordmark shows its name in
+   the pill. */
+.sec-wordmark {
+  display: block;
+  margin-left: auto;
+  width: auto;
+  max-width: min(var(--gs-size-110px), var(--gs-size-45pct));
+  height: var(--gs-size-22px);
+  object-fit: contain;
+  object-position: right center;
+}
+
+.sec-firm {
+  margin-left: auto;
+  max-width: var(--gs-size-60pct);
+  padding: var(--gs-size-6px) var(--gs-size-13px);
+  border-radius: var(--gs-radius-pill);
+  outline: 1px solid var(--gs-kyb-on-navy-rule);
+  outline-offset: var(--gs-size-neg-1px);
+  font-size: var(--gs-fs-ui);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-white);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The band's title is the screen's title on screen; the h1 under it, for
+   screen readers, holds the same words and takes focus. */
+.sec-title {
+  margin: 0;
+  min-height: var(--gs-size-56px);
+  font-family: var(--sec-font);
+  font-size: var(--gs-fs-24px);
+  font-weight: var(--gs-fw-medium);
+  line-height: var(--gs-leading-28px);
+  letter-spacing: var(--gs-tracking-neg-0p02em) !important;
+  color: var(--gs-white);
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.sec-flow h1:focus {
+  outline: none;
+}
+
+/* ── the panel ───────────────────────────────────────────────────────────── */
+
+.sec-shell {
+  max-width: var(--gs-kyb-shell);
+  margin: calc(-1 * var(--gs-s-6)) auto 0;
+  padding: 0 var(--gs-s-4) var(--gs-s-7);
+}
+
+.sec-card {
+  background: var(--gs-white);
+  border: 1px solid var(--gs-kyb-hair);
+  overflow: hidden;
+}
+
+.sec-body {
+  padding: var(--gs-size-40px);
+  overflow-wrap: anywhere;
+}
+
+.sec-progress + .sec-step-of + .sec-body {
+  padding-top: var(--gs-s-6);
+}
+
+/* The radii: the panel and the boxes 16px; the rows, the field, the tiles
+   and the choice tiles 10px. */
+.sec-card,
+.sec-box {
+  border-radius: var(--gs-radius-16px);
+}
+
+.sec-seat-row,
+.sec-input,
+.sec-tile,
+.sec-choice {
+  border-radius: var(--gs-radius-10px);
+}
+
+/* ── the step bar ────────────────────────────────────────────────────────── */
+
+.sec-progress {
+  list-style: none;
+  margin: 0;
+  padding: var(--gs-s-5) var(--gs-size-40px) 0;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: var(--gs-s-1);
+}
+
+.sec-progress li {
+  display: grid;
+  gap: var(--gs-size-10px);
+  min-width: 0;
+  font-size: var(--gs-fs-table);
+  line-height: var(--gs-leading-20px);
+  font-weight: var(--gs-fw-medium);
+  color: var(--gs-kyb-ink-2);
+}
+
+.sec-progress li::before {
+  content: "";
+  height: var(--gs-s-1);
+  border-radius: var(--gs-radius-pill);
+  background: var(--gs-kyb-panel-2);
+}
+
+.sec-progress li.sec-done::before {
+  background: var(--gs-kyb-ink);
+}
+
+.sec-progress li[aria-current="step"]:not(.sec-done)::before {
+  background: var(--gs-kyb-step);
+}
+
+.sec-progress li[aria-current="step"] {
+  color: var(--gs-kyb-head);
+  font-weight: var(--gs-fw-bold);
+}
+
+.sec-progress li span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sec-step-of {
+  display: none;
+  margin: 0;
+  padding: var(--gs-size-10px) var(--gs-size-20px) 0;
+  font-size: var(--gs-fs-table);
+  font-weight: var(--gs-fw-medium);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── summary boxes ───────────────────────────────────────────────────────── */
+
+.sec-box {
+  border: 1px solid var(--gs-kyb-rule);
+  padding: var(--gs-s-4) var(--gs-size-20px);
+  margin: 0 0 var(--gs-s-4);
+  background: var(--gs-white);
+}
+
+.sec-box-head {
+  margin: 0 0 var(--gs-s-2);
+  font-size: var(--gs-fs-value);
+  font-weight: var(--gs-fw-medium);
+  line-height: var(--gs-leading-24px);
+  color: var(--gs-kyb-head);
+}
+
+.sec-rows {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: var(--gs-s-2) var(--gs-s-4);
+  margin: 0;
+  font-size: var(--gs-fs-ui);
+  line-height: var(--gs-leading-20px);
+}
+
+.sec-row {
+  display: contents;
+}
+
+.sec-rows dt {
+  color: var(--gs-kyb-ink-2);
+  font-weight: var(--gs-fw-medium);
+}
+
+.sec-rows dd {
+  margin: 0;
+  color: var(--gs-kyb-ink);
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+.sec-eyebrow {
+  margin: 0 0 var(--gs-s-2);
+  font-size: var(--gs-fs-table);
+  font-weight: var(--gs-fw-medium);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.sec-none {
+  margin: 0 0 var(--gs-s-4);
+  font-size: var(--gs-fs-value);
+  line-height: var(--gs-leading-24px);
+  color: var(--gs-kyb-ink);
+}
+
+/* ── the seat rows: label, value, chevron; each opens its account ───────── */
+
+.sec-seat {
+  list-style: none;
+  margin: 0 calc(-1 * var(--gs-s-3));
+  padding: 0;
+}
+
+.sec-seat-row {
+  appearance: none;
+  width: 100%;
+  min-height: var(--gs-size-44px);
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: var(--gs-s-3);
+  align-items: center;
+  padding: var(--gs-size-10px) var(--gs-s-3);
+  border: 0;
+  background: transparent;
+  font-family: var(--sec-font);
+  font-size: var(--gs-fs-ui);
+  font-weight: var(--gs-fw-regular);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.sec-seat-row.sec-seat-icon {
+  grid-template-columns: auto minmax(0, 2fr) minmax(0, 3fr);
+}
+
+/* A scheduled change: its title, then its ready time on one line. */
+.sec-seat-row.sec-sched-row {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.sec-sched-row .sec-seat-value {
+  white-space: nowrap;
+}
+
+.sec-seat li + li {
+  border-top: 1px solid var(--gs-kyb-hair);
+  margin: 0 var(--gs-s-3);
+}
+
+.sec-seat li + li .sec-seat-row {
+  margin: 0 calc(-1 * var(--gs-s-3));
+  width: calc(100% + var(--gs-s-5));
+}
+
+.sec-seat-role {
+  font-weight: var(--gs-fw-medium);
+  color: var(--gs-kyb-ink);
+}
+
+.sec-seat-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gs-s-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.sec-chev {
+  width: var(--gs-s-4);
+  height: var(--gs-s-4);
+  color: var(--gs-kyb-muted);
+}
+
+/* ── the icons: lucide line icons in the accent, as the KYB tiles' ──────── */
+
+.sec-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--gs-icon-20px);
+  height: var(--gs-icon-20px);
+  color: var(--gs-kyb-accent);
+}
+
+.sec-icon > svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── a wallet's actions: a tile for each one the firm starts here, then a
+   row for each other one, its tag at the right ─────────────────────────── */
+
+.sec-tiles {
+  list-style: none;
+  margin: 0 0 var(--gs-s-3);
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gs-s-3);
+}
+
+.sec-tile {
+  appearance: none;
+  width: 100%;
+  height: 100%;
+  min-height: var(--gs-size-88px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gs-s-3);
+  padding: var(--gs-s-4) var(--gs-s-3);
+  border: 1px solid var(--gs-kyb-rule-strong);
+  background: var(--gs-white);
+  font-family: var(--sec-font);
+  font-size: var(--gs-fs-ui);
+  font-weight: var(--gs-fw-medium);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-ink);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 120ms var(--sec-ease);
+}
+
+.sec-tile .sec-icon {
+  width: var(--gs-icon-28px);
+  height: var(--gs-icon-28px);
+}
+
+.sec-acts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sec-act {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--gs-s-3);
+  min-height: var(--gs-size-44px);
+  padding: var(--gs-s-2) 0;
+  font-size: var(--gs-fs-ui);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-ink);
+}
+
+.sec-act + .sec-act {
+  border-top: 1px solid var(--gs-kyb-hair);
+}
+
+.sec-tag {
+  padding: var(--gs-size-2px) var(--gs-s-2);
+  border-radius: var(--gs-radius-pill);
+  background: var(--gs-kyb-panel-2);
+  font-size: var(--gs-fs-label);
+  font-weight: var(--gs-fw-medium);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-ink-2);
+  white-space: nowrap;
+}
+
+/* ── Manage multisig: the wallet's keys in full, one per row, the connected
+   wallet's tagged; then the approvals needed ─────────────────────────────── */
+
+.sec-keys {
+  list-style: none;
+  margin: 0 0 var(--gs-s-3);
+  padding: 0;
+}
+
+.sec-key {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gs-s-1) var(--gs-s-2);
+  padding: var(--gs-s-2) 0;
+  font-size: var(--gs-fs-label);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-ink);
+}
+
+.sec-key + .sec-key {
+  border-top: 1px solid var(--gs-kyb-hair);
+}
+
+.sec-key code {
+  min-width: 0;
+  font-family: var(--gs-font-mono);
+  font-size: var(--gs-fs-label);
+  overflow-wrap: anywhere;
+}
+
+/* ── an action's choices: one tile per option (the KYB tiles' look), an
+   address or a number field ────────────────────────────────────────────── */
+
+.sec-inputs {
+  display: grid;
+  gap: var(--gs-s-5);
+}
+
+.sec-choices-set {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: grid;
+  gap: var(--gs-s-2);
+  min-width: 0;
+}
+
+.sec-choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gs-s-3);
+}
+
+.sec-choice {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gs-s-1);
+  min-height: var(--gs-size-72px);
+  padding: var(--gs-s-3);
+  border: 1px solid var(--gs-kyb-rule-strong);
+  background: var(--gs-white);
+  text-align: center;
+  cursor: pointer;
+}
+
+.sec-choice input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.sec-choice-title {
+  font-size: var(--gs-fs-ui);
+  font-weight: var(--gs-fw-medium);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.sec-choice-line {
+  font-size: var(--gs-fs-label);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-ink-2);
+}
+
+/* Picked: the navy line drawn inside the tile, over the tint. */
+.sec-choice:has(input:checked) {
+  border-color: var(--gs-kyb-navy);
+  background: var(--gs-kyb-navy-tint);
+  box-shadow: inset 0 0 0 1px var(--gs-kyb-navy);
+}
+
+.sec-choice:has(input:focus-visible) {
+  outline: var(--gs-size-2px) solid var(--gs-kyb-navy);
+  outline-offset: var(--gs-size-2px);
+}
+
+.sec-hint,
+.sec-field-error {
+  margin: 0;
+  font-size: var(--gs-fs-label);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-ink-2);
+}
+
+.sec-field-error {
+  color: var(--gs-ticket-error);
+}
+
+.sec-input[aria-invalid="true"] {
+  border-color: var(--gs-ticket-error);
+}
+
+/* ── a plan: its effect, then its exact calls under Details ─────────────── */
+
+.sec-lead {
+  margin: 0 0 var(--gs-s-4);
+  font-size: var(--gs-fs-value);
+  line-height: var(--gs-leading-24px);
+  color: var(--gs-kyb-head);
+}
+
+.sec-details {
+  margin: 0 0 var(--gs-s-4);
+  border-top: 1px solid var(--gs-kyb-rule);
+}
+
+.sec-details summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--gs-size-44px);
+  font-size: var(--gs-fs-ui);
+  font-weight: var(--gs-fw-medium);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-ink);
+  cursor: pointer;
+  list-style: none;
+}
+
+.sec-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.sec-details[open] summary .sec-chev {
+  transform: rotate(180deg);
+}
+
+.sec-call {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  gap: var(--gs-s-1) var(--gs-s-4);
+  margin: 0 0 var(--gs-s-3);
+  padding: var(--gs-s-3) 0 0;
+  border-top: 1px solid var(--gs-kyb-hair);
+  font-size: var(--gs-fs-label);
+  line-height: var(--gs-leading-20px);
+}
+
+.sec-call dt {
+  color: var(--gs-kyb-ink-2);
+  font-weight: var(--gs-fw-medium);
+}
+
+.sec-call dd {
+  margin: 0;
+  display: grid;
+  color: var(--gs-kyb-ink);
+  overflow-wrap: anywhere;
+}
+
+.sec-call code,
+.sec-rows code {
+  font-family: var(--gs-font-mono);
+  font-size: var(--gs-fs-label);
+  overflow-wrap: anywhere;
+}
+
+.sec-to {
+  font-family: var(--gs-font-mono);
+  font-size: var(--gs-fs-label);
+}
+
+/* The wallet step: the address the wallet sends to, in full; on one line,
+   or in two equal halves where the line is too narrow. */
+.sec-to {
+  display: block;
+  max-width: 100%;
+  overflow-wrap: normal;
+  word-break: keep-all;
+  margin: var(--gs-s-2) 0 0;
+  padding: var(--gs-s-2) var(--gs-s-3);
+  background: var(--gs-kyb-panel);
+  color: var(--gs-kyb-ink);
+}
+
+.sec-error.sec-error-after {
+  margin: var(--gs-s-4) 0 0;
+}
+
+.sec-fail {
+  display: grid;
+  justify-items: start;
+  gap: var(--gs-s-2);
+  margin: 0 0 var(--gs-s-4);
+}
+
+.sec-act-value {
+  font-size: var(--gs-fs-label);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-ink-2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.sec-tag-on {
+  background: var(--gs-kyb-navy-tint);
+  color: var(--gs-kyb-navy);
+}
+
+.sec-seat-value .sec-tag {
+  margin-left: var(--gs-s-2);
+}
+
+.sec-tile:disabled {
+  cursor: progress;
+}
+
+.sec-tile[aria-busy="true"] {
+  border-color: var(--gs-kyb-navy);
+}
+
+/* ── notes: a send that is off, a failure ────────────────────────────────── */
+
+.sec-note {
+  margin: 0 0 var(--gs-s-5);
+  padding: var(--gs-s-3) var(--gs-s-4);
+  border-left: var(--gs-size-2px) solid var(--gs-kyb-step);
+  background: var(--gs-kyb-panel);
+  font-size: var(--gs-fs-ui);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-ink);
+}
+
+.sec-error {
+  margin: 0 0 var(--gs-s-4);
+  font-size: var(--gs-fs-ui);
+  font-weight: var(--gs-fw-medium);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-ticket-error);
+}
+
+/* The wallet step's stand-in for the wallet, in CRX's preview line. */
+.sec-flow .sec-staff-sign {
+  font-weight: var(--gs-fw-medium);
+}
+
+/* ── the wallet and done centres ─────────────────────────────────────────── */
+
+.sec-wait {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  margin: 0 0 var(--gs-s-5);
+}
+
+.sec-ring {
+  position: relative;
+  width: var(--gs-kyb-ring);
+  height: var(--gs-kyb-ring);
+  border-radius: var(--gs-radius-pill);
+  border: var(--gs-size-2px) solid var(--gs-kyb-panel-2);
+  display: grid;
+  place-items: center;
+  margin: 0 0 var(--gs-s-4);
+}
+
+.sec-ring::before {
+  content: "";
+  position: absolute;
+  inset: var(--gs-size-neg-2px);
+  border-radius: var(--gs-radius-pill);
+  border: var(--gs-size-2px) solid transparent;
+  border-top-color: var(--gs-kyb-navy);
+  animation: sec-spin 1.4s linear infinite;
+}
+
+.sec-ring-in {
+  width: var(--gs-kyb-ring-in);
+  height: var(--gs-kyb-ring-in);
+  border-radius: var(--gs-radius-pill);
+  background: var(--gs-kyb-navy);
+  display: grid;
+  place-items: center;
+}
+
+.sec-ring-mark {
+  width: auto;
+  height: var(--gs-size-30px);
+}
+
+.sec-tick {
+  width: var(--gs-size-56px);
+  height: var(--gs-size-56px);
+  border-radius: var(--gs-radius-pill);
+  background: var(--gs-kyb-navy);
+  color: var(--gs-white);
+  display: grid;
+  place-items: center;
+  margin: 0 0 var(--gs-s-4);
+}
+
+.sec-tick-icon {
+  width: var(--gs-s-5);
+  height: var(--gs-s-5);
+}
+
+.sec-wait-head {
+  margin: 0;
+  font-size: var(--gs-fs-value);
+  font-weight: var(--gs-fw-medium);
+  line-height: var(--gs-leading-24px);
+  color: var(--gs-kyb-head);
+}
+
+@keyframes sec-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sec-ring::before {
+    animation: none;
+  }
+}
+
+/* ── the field ───────────────────────────────────────────────────────────── */
+
+.sec-field {
+  display: grid;
+  gap: var(--gs-size-6px);
+}
+
+.sec-field-label {
+  font-size: var(--gs-fs-ui);
+  font-weight: var(--gs-fw-medium);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-ink);
+}
+
+.sec-input {
+  height: var(--gs-size-44px);
+  padding: 0 var(--gs-s-3);
+  border: 1px solid var(--gs-edge-control);
+  background: var(--gs-white);
+  font-family: var(--sec-font);
+  font-size: var(--gs-fs-value);
+  line-height: var(--gs-leading-1p5);
+  color: var(--gs-kyb-ink);
+  caret-color: var(--gs-kyb-navy);
+}
+
+.sec-input:focus-visible {
+  outline: var(--gs-size-2px) solid var(--gs-kyb-navy);
+  outline-offset: var(--gs-size-2px);
+}
+
+/* ── the foot: Back left; the primary right ──────────────────────────────── */
+
+.sec-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--gs-s-4);
+  margin-top: var(--gs-s-6);
+  flex-wrap: wrap;
+}
+
+.sec-foot > .sec-cta:only-child {
+  margin-left: auto;
+}
+
+/* Home: the primary right under the request it opens. */
+.sec-foot.sec-foot-tight {
+  margin: 0 0 var(--gs-s-6);
+}
+
+.sec-foot-right {
+  display: flex;
+  gap: var(--gs-s-3);
+  margin-left: auto;
+}
+
+.sec-cta,
+.sec-btn {
+  appearance: none;
+  min-height: var(--gs-size-44px);
+  padding: 0 var(--gs-size-20px);
+  border-radius: var(--gs-radius-pill);
+  font-family: var(--sec-font);
+  font-size: var(--gs-fs-ui);
+  font-weight: var(--gs-fw-medium);
+  line-height: var(--gs-leading-20px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 120ms var(--sec-ease);
+}
+
+.sec-cta {
+  border: 1px solid var(--gs-kyb-navy);
+  background: var(--gs-kyb-navy);
+  color: var(--gs-white);
+}
+
+.sec-btn {
+  border: 1px solid var(--gs-kyb-rule-strong);
+  background: transparent;
+  color: var(--gs-kyb-navy);
+}
+
+.sec-cta:active,
+.sec-btn:active {
+  transform: scale(0.97);
+}
+
+.sec-cta:disabled,
+.sec-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sec-cta:active,
+  .sec-btn:active {
+    transform: none;
+  }
+}
+
+.sec-link {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0;
+  min-height: var(--gs-size-44px);
+  font-family: var(--sec-font);
+  font-size: var(--gs-fs-ui);
+  font-weight: var(--gs-fw-medium);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-ink);
+  cursor: pointer;
+}
+
+/* Hover on a fine pointer only: a tap leaves no hover colour behind. */
+@media (hover: hover) {
+  .sec-cta:hover:not(:disabled) {
+    background: var(--gs-kyb-navy-hover);
+    border-color: var(--gs-kyb-navy-hover);
+  }
+
+  .sec-btn:hover:not(:disabled) {
+    background: var(--gs-kyb-navy-tint);
+    border-color: var(--gs-kyb-control-hover);
+  }
+
+  .sec-seat-row:hover {
+    background: var(--gs-kyb-panel);
+  }
+
+  .sec-seat-row:hover .sec-chev {
+    color: var(--gs-kyb-navy);
+  }
+
+  .sec-tile:hover:not(:disabled) {
+    border-color: var(--gs-kyb-navy);
+  }
+
+  .sec-choice:hover:not(:has(input:checked)) {
+    border-color: var(--gs-kyb-control-hover);
+  }
+
+  .sec-details summary:hover {
+    color: var(--gs-kyb-navy);
+  }
+
+  .sec-input:hover {
+    border-color: var(--gs-kyb-ink-2);
+  }
+
+  .sec-link:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: var(--gs-size-3px);
+  }
+
+  .sec-staff a:hover,
+  .sec-staff-btn:hover {
+    color: var(--gs-kyb-link-hover);
+    text-decoration: underline;
+    text-underline-offset: var(--gs-size-3px);
+  }
+}
+
+/* ── a control's line (ActionHint): what the seat row, scheduled change
+   row, tile or primary button does ─────────────────────────────────────────
+
+   Touch: small secondary text under the label, always shown. A hover
+   pointer: a navy tip over the control, out of the flow, so nothing shifts;
+   a tile's tip centred on the tile, a row's at its left, a button's at its
+   right. The pointer shows it after --sm-d-tip-delay, keyboard focus at
+   once; it fades in over --sm-d-tip and out over --sm-d-tip-exit, opacity
+   only, and takes no pointer. Escape hides it (data-off). Nothing moves, so
+   reduced motion keeps the fades (MOTION.md rule 3). */
+
+.sec-ahint {
+  display: block;
+  font-size: var(--gs-fs-label);
+  font-weight: var(--gs-fw-regular);
+  line-height: var(--gs-leading-16px);
+  color: var(--gs-kyb-ink-2);
+  text-align: left;
+}
+
+@media (hover: none) {
+  .sec-tile > .sec-ahint {
+    margin-top: calc(-1 * var(--gs-s-2));
+    text-align: center;
+  }
+
+  .sec-seat-row:has(> .sec-ahint) {
+    row-gap: var(--gs-size-2px);
+  }
+
+  .sec-seat-row > .sec-ahint {
+    grid-column: 2 / -1;
+  }
+
+  .sec-seat-row.sec-sched-row > .sec-ahint {
+    grid-column: 1 / -1;
+  }
+
+  :is(.sec-cta, .sec-btn):has(> .sec-ahint) {
+    flex-direction: column;
+    padding-block: var(--gs-size-6px);
+  }
+
+  :is(.sec-cta, .sec-btn) > .sec-ahint {
+    color: inherit;
+    text-align: center;
+  }
+}
+
+@media (hover: hover) {
+  :is(.sec-tile, .sec-seat-row, .sec-cta, .sec-btn):has(> .sec-ahint) {
+    position: relative;
+  }
+
+  .sec-flow .sec-ahint {
+    position: absolute;
+    bottom: calc(100% + var(--gs-size-6px));
+    z-index: 2;
+    width: max-content;
+    max-width: var(--gs-size-240px);
+    padding: var(--gs-size-6px) var(--gs-s-2);
+    border-radius: var(--gs-radius-1);
+    background: var(--gs-kyb-navy);
+    color: var(--gs-white);
+    white-space: normal;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--sm-d-tip-exit, 120ms) var(--sm-ease-move, cubic-bezier(0.4, 0, 0.2, 1)),
+      visibility 0ms linear var(--sm-d-tip-exit, 120ms);
+  }
+
+  .sec-flow .sec-tile > .sec-ahint {
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+    max-width: 100%;
+  }
+
+  .sec-flow .sec-seat-row > .sec-ahint {
+    left: var(--gs-s-3);
+  }
+
+  .sec-flow :is(.sec-cta, .sec-btn) > .sec-ahint {
+    right: 0;
+  }
+
+  .sec-flow :hover > .sec-ahint {
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity var(--sm-d-tip, 200ms) var(--sm-ease-move, cubic-bezier(0.4, 0, 0.2, 1)) var(--sm-d-tip-delay, 600ms),
+      visibility 0ms linear var(--sm-d-tip-delay, 600ms);
+  }
+
+  .sec-flow :focus-visible > .sec-ahint {
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity var(--sm-d-tip, 200ms) var(--sm-ease-move, cubic-bezier(0.4, 0, 0.2, 1)),
+      visibility 0ms linear;
+  }
+
+  .sec-flow .sec-ahint[data-off] {
+    opacity: 0;
+    visibility: hidden;
+    transition: none;
+  }
+}
+
+/* ── CRX's preview line under the panel ──────────────────────────────────── */
+
+.sec-staff {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--gs-s-1) var(--gs-s-4);
+  padding: var(--gs-s-4) var(--gs-s-1) 0;
+  font-size: var(--gs-fs-label);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-ink-2);
+}
+
+.sec-staff p {
+  margin: 0;
+}
+
+.sec-staff-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gs-s-1) var(--gs-s-4);
+  margin-left: auto;
+}
+
+.sec-staff a,
+.sec-staff-btn {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: var(--gs-size-2px) 0;
+  font-family: var(--sec-font);
+  font-size: var(--gs-fs-label);
+  font-weight: var(--gs-fw-regular);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-link);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* ── the live page's Safe{Wallet} line under the panel ───────────────────── */
+
+.sec-fallback {
+  padding: var(--gs-s-4) var(--gs-s-1) 0;
+  font-size: var(--gs-fs-label);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-ink-2);
+}
+
+.sec-fallback p {
+  margin: 0 0 var(--gs-s-1);
+}
+
+.sec-fallback ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--gs-s-1);
+}
+
+.sec-fallback li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--gs-s-2);
+}
+
+.sec-fallback-role {
+  min-width: var(--gs-s-8);
+  font-weight: var(--gs-fw-medium);
+  color: var(--gs-kyb-ink);
+}
+
+.sec-fallback a {
+  font-family: var(--gs-font-mono);
+  color: var(--gs-kyb-link);
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+
+/* ── the check guide (VerifyGuide) ───────────────────────────────────────── */
+
+/* A wallet's screen beside the numbered steps, at every width; under 560px
+   a narrow screen with bars only. A value wraps anywhere and selects whole
+   on one click. */
+.sec-vg-grid {
+  display: grid;
+  grid-template-columns: var(--gs-size-76px) minmax(0, 1fr);
+  gap: var(--gs-s-3);
+  align-items: start;
+}
+
+.sec-vg-device {
+  display: grid;
+  justify-items: center;
+  gap: var(--gs-size-6px);
+  padding: var(--gs-s-2) var(--gs-s-1) var(--gs-s-3);
+  border-radius: var(--gs-radius-2);
+  background: var(--gs-kyb-navy);
+}
+
+.sec-vg-speaker {
+  width: var(--gs-s-5);
+  height: var(--gs-size-3px);
+  border-radius: var(--gs-radius-pill);
+  background: var(--gs-kyb-on-navy-rule);
+}
+
+.sec-vg-screen {
+  display: grid;
+  gap: var(--gs-size-3px);
+  width: 100%;
+  padding: var(--gs-size-6px) var(--gs-s-1);
+  border-radius: var(--gs-radius-tag);
+  background: var(--gs-kyb-panel);
+}
+
+.sec-vg-row {
+  display: grid;
+  gap: var(--gs-size-3px);
+  padding: var(--gs-s-1);
+  border-radius: var(--gs-radius-tag);
+}
+
+.sec-vg-row-label {
+  font-size: var(--gs-fs-label);
+  font-weight: var(--gs-fw-medium);
+  line-height: var(--gs-leading-16px);
+  color: var(--gs-kyb-ink-2);
+}
+
+.sec-vg-bar {
+  height: var(--gs-size-6px);
+  border-radius: var(--gs-radius-pill);
+  background: var(--gs-kyb-rule-strong);
+}
+
+.sec-vg-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--gs-s-1);
+}
+
+.sec-vg-step {
+  display: grid;
+  grid-template-columns: var(--gs-size-22px) minmax(0, 1fr);
+  gap: var(--gs-size-10px);
+  padding: var(--gs-size-6px);
+  border: 1px solid transparent;
+  border-radius: var(--gs-radius-2);
+}
+
+.sec-vg-num {
+  display: grid;
+  place-items: center;
+  width: var(--gs-size-22px);
+  height: var(--gs-size-22px);
+  border-radius: var(--gs-radius-pill);
+  background: var(--gs-kyb-panel-2);
+  color: var(--gs-kyb-ink);
+  font-size: var(--gs-fs-label);
+  font-weight: var(--gs-fw-bold);
+  line-height: var(--gs-leading-16px);
+  font-variant-numeric: tabular-nums;
+}
+
+.sec-vg-text {
+  min-width: 0;
+}
+
+.sec-vg-title {
+  margin: 0;
+  font-size: var(--gs-fs-ui);
+  font-weight: var(--gs-fw-medium);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-head);
+}
+
+.sec-vg-line {
+  margin: 0;
+  font-size: var(--gs-fs-table);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-ink);
+}
+
+.sec-vg-link {
+  margin-top: var(--gs-s-1);
+}
+
+.sec-vg-line a {
+  color: var(--gs-kyb-link);
+  overflow-wrap: anywhere;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: var(--gs-size-3px);
+}
+
+.sec-vg-values {
+  display: grid;
+  gap: var(--gs-s-1);
+  margin: var(--gs-s-1) 0 0;
+}
+
+.sec-vg-value dt {
+  font-size: var(--gs-fs-label);
+  font-weight: var(--gs-fw-medium);
+  line-height: var(--gs-leading-16px);
+  color: var(--gs-kyb-ink-2);
+}
+
+.sec-vg-value dd {
+  margin: 0;
+}
+
+.sec-vg-value code {
+  display: block;
+  font-family: var(--gs-font-mono);
+  font-size: var(--gs-fs-label);
+  line-height: var(--gs-leading-16px);
+  color: var(--gs-kyb-ink);
+  overflow-wrap: anywhere;
+  -webkit-user-select: all;
+  user-select: all;
+}
+
+/* A step's longer list, collapsed: the chevron turns, the body shows at once. */
+.sec-vg-more {
+  margin: var(--gs-s-1) 0 0;
+}
+
+.sec-vg-more summary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gs-s-1);
+  min-height: var(--gs-size-22px);
+  font-size: var(--gs-fs-table);
+  font-weight: var(--gs-fw-medium);
+  line-height: var(--gs-leading-20px);
+  color: var(--gs-kyb-ink);
+  cursor: pointer;
+  list-style: none;
+}
+
+.sec-vg-more summary::-webkit-details-marker {
+  display: none;
+}
+
+.sec-vg-more[open] summary .sec-chev {
+  transform: rotate(180deg);
+}
+
+@media (hover: hover) {
+  .sec-vg-more summary:hover {
+    color: var(--gs-kyb-navy);
+  }
+
+  .sec-vg-line a:hover {
+    color: var(--gs-kyb-link-hover);
+  }
+}
+
+/* The wallet step: the address keeps its place once the send is out. */
+.sec-to.sec-to-sent {
+  visibility: hidden;
+}
+
+/* Each step and its row of the screen light up in turn, 1.2 s each: colour
+   only, back to rest at the end. Reduced motion: no change. */
+.sec-vg-step:nth-child(2),
+.sec-vg-row:nth-child(2) {
+  --sec-vg-at: 1600ms;
+}
+
+.sec-vg-step:nth-child(3),
+.sec-vg-row:nth-child(3) {
+  --sec-vg-at: 2800ms;
+}
+
+.sec-vg-step:nth-child(4),
+.sec-vg-row:nth-child(4) {
+  --sec-vg-at: 4000ms;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sec-vg-more summary .sec-chev {
+    transition: transform 200ms var(--sm-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+  }
+
+  .sec-vg-on .sec-vg-step,
+  .sec-vg-on .sec-vg-row {
+    animation: sec-vg-lit 1200ms var(--sm-ease-color, cubic-bezier(0.25, 0.1, 0.25, 1)) var(--sec-vg-at, 400ms);
+  }
+
+  .sec-vg-on .sec-vg-num {
+    animation: sec-vg-num 1200ms var(--sm-ease-color, cubic-bezier(0.25, 0.1, 0.25, 1)) var(--sec-vg-at, 400ms);
+  }
+
+  .sec-vg-on .sec-vg-row-label {
+    animation: sec-vg-ink 1200ms var(--sm-ease-color, cubic-bezier(0.25, 0.1, 0.25, 1)) var(--sec-vg-at, 400ms);
+  }
+
+  .sec-vg-on .sec-vg-bar {
+    animation: sec-vg-bar 1200ms var(--sm-ease-color, cubic-bezier(0.25, 0.1, 0.25, 1)) var(--sec-vg-at, 400ms);
+  }
+}
+
+@keyframes sec-vg-lit {
+  12%,
+  88% {
+    background-color: var(--gs-kyb-navy-tint);
+    border-color: var(--gs-kyb-rule-strong);
+  }
+}
+
+@keyframes sec-vg-num {
+  12%,
+  88% {
+    background-color: var(--gs-kyb-navy);
+    color: var(--gs-white);
+  }
+}
+
+@keyframes sec-vg-ink {
+  12%,
+  88% {
+    color: var(--gs-kyb-navy);
+  }
+}
+
+@keyframes sec-vg-bar {
+  12%,
+  88% {
+    background-color: var(--gs-kyb-navy);
+  }
+}
+
+/* Under 560px: a 56px screen with bars only, beside the steps. The wallet
+   step's head holds two lines, so its shorter sent line moves nothing. */
+@media (max-width: token(--gs-breakpoint-560px)) {
+  .sec-wait-head {
+    min-height: var(--gs-s-7);
+  }
+
+  .sec-vg-grid {
+    grid-template-columns: var(--gs-size-56px) minmax(0, 1fr);
+    gap: var(--gs-s-2);
+  }
+
+  .sec-vg-row-label {
+    display: none;
+  }
+
+  .sec-vg-row {
+    padding: var(--gs-size-6px) var(--gs-s-1);
+  }
+}
+
+/* ── the phone ───────────────────────────────────────────────────────────── */
+
+@media (max-width: token(--gs-breakpoint-560px)) {
+  .sec-band-in {
+    padding: 0 var(--gs-s-1);
+  }
+
+  /* A scheduled change on two lines: its title on one (its review holds
+     the whole), then its time. */
+  .sec-seat-row.sec-sched-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--gs-size-2px);
+  }
+
+  .sec-sched-row .sec-seat-role {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sec-call {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .sec-call dd {
+    margin-bottom: var(--gs-s-2);
+  }
+
+  .sec-body {
+    padding: var(--gs-s-5) var(--gs-size-20px) var(--gs-size-28px);
+  }
+
+  .sec-progress + .sec-step-of + .sec-body {
+    padding-top: var(--gs-size-20px);
+  }
+
+  .sec-progress {
+    padding: var(--gs-size-18px) var(--gs-size-20px) 0;
+  }
+
+  .sec-progress li span {
+    display: none;
+  }
+
+  .sec-progress li {
+    gap: 0;
+  }
+
+  .sec-step-of {
+    display: block;
+  }
+
+  .sec-rows {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .sec-rows dt {
+    font-size: var(--gs-fs-label);
+  }
+
+  .sec-rows dd {
+    margin-bottom: var(--gs-size-10px);
+  }
+
+  .sec-row:last-child dd {
+    margin-bottom: 0;
+  }
+
+  .sec-box {
+    padding: var(--gs-size-14px) var(--gs-s-4);
+  }
+
+  .sec-foot {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: var(--gs-s-2);
+  }
+
+  .sec-foot-right {
+    flex-direction: column-reverse;
+    margin-left: 0;
+    gap: var(--gs-s-2);
+  }
+
+  .sec-cta,
+  .sec-btn {
+    width: 100%;
+    min-height: var(--gs-s-7);
+  }
+
+  .sec-link {
+    align-self: center;
+  }
+
+  .sec-staff-links {
+    margin-left: 0;
+  }
+}

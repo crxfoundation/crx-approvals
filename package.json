@@ -1,0 +1,32 @@
+{
+  "name": "crx-approvals",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static page to approve and start actions on the CRX wallets through your own wallet.",
+  "license": "MIT",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/build.mjs && node scripts/check.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "lucide-react": "1.17.0",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "viem": "2.54.6"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2",
+    "postcss": "8.5.15"
+  },
+  "overrides": {
+    "@noble/curves": "1.9.1",
+    "@noble/hashes": "1.8.0",
+    "abitype": "1.2.3",
+    "isows": "1.0.7",
+    "ox": "0.14.30",
+    "scheduler": "0.27.0"
+  }
+}
